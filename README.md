@@ -1,7 +1,8 @@
 # Pulse
 
-The PULSE design system for the app family (Spotter · Plate · Cookbook), packaged as an Android
-library: **`design.pulse:pulse-ui`**.
+The PULSE design system for the app family (Spotter · Plate · Cookbook · Dragonfly · Hawksnest),
+packaged as an Android library: **`design.pulse:pulse-ui`**. (Hawksnest's web app uses a CSS port
+of the tokens; the others consume this library or an in-tree copy — see CLAUDE.md.)
 
 PULSE is a data-forward, instrument-panel design language — flat hairline-stroked panels, channel
 colors that carry meaning, monospace numerals (slashed zeros), uppercase captions, one motion
@@ -24,11 +25,12 @@ Cookbook became the third copy.
 Channel *semantics*. The library only knows hues and structure; each app decides what the hues
 mean and provides its own domain-named CompositionLocal on top of `PulseTheme`:
 
-| App      | Lead accent | Channel meanings                                  |
-|----------|-------------|---------------------------------------------------|
-| Spotter  | Blue        | effort=blue, strength=violet, streak=orange, recovery=green |
-| Plate    | Blue        | carbs=blue, calories=violet, fat=orange, protein=green |
-| Cookbook | **Amber**   | heat=amber/orange (hero), fresh=green (done), info=blue, plum=violet |
+| App       | Lead accent | Channel meanings                                  |
+|-----------|-------------|---------------------------------------------------|
+| Spotter   | Blue        | effort=blue, strength=violet, streak=orange, recovery=green |
+| Plate     | Blue        | carbs=blue, calories=violet, fat=orange, protein=green |
+| Cookbook  | **Amber**   | heat=amber/orange (hero), fresh=green (done), info=blue, plum=violet |
+| Dragonfly | **Violet**  | hub=violet (identity/primary), info=blue (versions), ok=green (up-to-date), warn=amber (update available) |
 
 ## Consuming
 
