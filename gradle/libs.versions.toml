@@ -1,10 +1,12 @@
-# Versions here MUST stay aligned with the consuming apps (Cookbook, and eventually
-# Spotter/Plate) — composite builds only stay binary-compatible when AGP/Kotlin/Compose match.
+# Versions here MUST stay aligned with the consuming apps (Cookbook, Spotter, Plate, Dragonfly,
+# Hawksnest) — composite builds only stay binary-compatible when AGP/Kotlin/Compose match.
+# AGP 9 provides built-in Kotlin, so the org.jetbrains.kotlin.android plugin is no longer applied;
+# only the Compose compiler plugin (pinned to the Kotlin version) remains.
 [versions]
-agp = "8.5.0"
-kotlin = "2.0.0"
-coreKtx = "1.13.1"
-composeBom = "2024.06.00"
+agp = "9.1.1"
+kotlin = "2.2.10"
+coreKtx = "1.19.0"
+composeBom = "2026.06.01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -16,5 +18,4 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
