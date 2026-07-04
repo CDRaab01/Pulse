@@ -10,7 +10,7 @@ about the responsibilities that come with editing a library four apps depend on.
 |---|---|---|
 | Cookbook | composite build `includeBuild("../../Pulse")` | Amber |
 | Dragonfly (hub) | composite build | Violet |
-| Spotter | **in-tree copy** of PULSE (`android/app/.../ui/theme/`) — migration to this lib is a planned, per-app task | Blue |
+| Spotter | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | Blue |
 | Plate | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | **Green** |
 | Hawksnest | CSS port only (`src/theme/tokens.css`) — web can't consume a Compose lib | (dark-only web) |
 
@@ -21,9 +21,15 @@ Consequences:
   version gate in practice (the dependency line says `0.1.0` but the composite build always uses
   the sibling working tree/branch that CI checks out). Breaking API changes here break those
   apps' CI immediately; build all three consumers before pushing.
-- **Spotter does NOT get changes** until its in-tree copy is migrated. If you fix a token or
-  component here, the fix is invisible in Spotter — either port it manually or do the migration.
-  Watch for drift in the meantime. (Plate was migrated 2026-07-03; only Spotter remains in-tree.)
+- **All four consumers (Cookbook/Dragonfly/Plate/Spotter) now take changes automatically** — every
+  app is on the composite build. Build all four before pushing a breaking change here. (Hawksnest is
+  a separate CSS port; not a Compose consumer.)
+- **Components are the superset from Spotter** (the original richer PULSE), reconciled 2026-07-03:
+  `StatTile` has a `dense` metric layout (icon/animatedValue/sparkline) alongside the standard tile;
+  `PanelCard` takes onClick/channel/raised/contentPadding; `SectionHeader` takes a `trailing` slot;
+  `Sparkline` has a filled-line mode via a non-null `strokeWidth`; `TickerNumber` is here now. New
+  params are additive with backward-compatible defaults, so the leaner callers stay pixel-identical —
+  keep it that way (verify all four apps' Roborazzi when touching a shared component).
 - **Version alignment is load-bearing:** consumers' AGP/Kotlin/Compose-BOM must match
   `gradle/libs.versions.toml` here (currently AGP 8.5.0 / Kotlin 2.0.0 / BOM 2024.06.00).
   Composite builds are only binary-compatible on matching versions. Bumping any of these is a

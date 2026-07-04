@@ -1,8 +1,11 @@
 package design.pulse.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,23 +21,35 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import design.pulse.ui.theme.Pulse
+import design.pulse.ui.theme.PulseMotion
 
 /**
  * The PULSE component kit. Flat panels (hairline stroke + tone, no shadows), monospace data
@@ -43,21 +58,54 @@ import design.pulse.ui.theme.Pulse
  * ([Pulse.accent]); pass a channel explicitly when a surface belongs to a specific data domain.
  */
 
-/** A flat, hairline-stroked surface — the base container for everything. Optional channel tint. */
+/**
+ * A flat, hairline-stroked surface — the base container for everything. Depth comes from tone
+ * ([raised] uses the lighter panel) and stroke, never elevation. [channel] tints the *stroke* for a
+ * panel that's "live" in a data domain; [tint]/[containerColor] override the *background* fill. When
+ * [onClick] is set the whole panel is tappable with a press-scale. Content runs in a [ColumnScope].
+ */
 @Composable
 fun PanelCard(
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    channel: Color? = null,
     tint: Color? = null,
-    content: @Composable () -> Unit,
+    raised: Boolean = false,
+    containerColor: Color? = null,
+    contentPadding: Dp = Pulse.spacing.lg,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     val structure = Pulse.structure
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(tint ?: structure.panel)
-            .border(1.dp, structure.hairline, RoundedCornerShape(12.dp))
-            .padding(16.dp),
-    ) { content() }
+    val shape = MaterialTheme.shapes.medium
+    val color = containerColor ?: tint ?: if (raised) structure.panelHigh else structure.panel
+    val border = BorderStroke(1.dp, channel?.copy(alpha = 0.35f) ?: structure.hairline)
+    val inner: @Composable () -> Unit = {
+        Column(modifier = Modifier.padding(contentPadding), content = content)
+    }
+    if (onClick != null) {
+        val interaction = remember { MutableInteractionSource() }
+        Surface(
+            onClick = onClick,
+            modifier = modifier.pressScale(interaction),
+            shape = shape,
+            color = color,
+            border = border,
+            tonalElevation = 0.dp,
+            shadowElevation = 0.dp,
+            interactionSource = interaction,
+            content = inner,
+        )
+    } else {
+        Surface(
+            modifier = modifier,
+            shape = shape,
+            color = color,
+            border = border,
+            tonalElevation = 0.dp,
+            shadowElevation = 0.dp,
+            content = inner,
+        )
+    }
 }
 
 /** A monospace numeric readout. Defaults to the small data scale; pass a [style] for a hero figure. */
@@ -69,6 +117,29 @@ fun DataText(
     color: Color = MaterialTheme.colorScheme.onSurface,
 ) {
     Text(text = text, modifier = modifier, style = style, color = color)
+}
+
+/**
+ * A [DataText] readout that rolls up to [target] when it first appears (and sweeps between values on
+ * change), on the slower data easing so the number feels measured rather than printed.
+ */
+@Composable
+fun TickerNumber(
+    target: Int,
+    modifier: Modifier = Modifier,
+    style: TextStyle = Pulse.dataType.dataSmall,
+    color: Color = Color.Unspecified,
+    prefix: String = "",
+    suffix: String = "",
+) {
+    var goal by remember { mutableIntStateOf(0) }
+    LaunchedEffect(target) { goal = target }
+    val value by animateIntAsState(
+        targetValue = goal,
+        animationSpec = PulseMotion.data(),
+        label = "ticker",
+    )
+    DataText(text = "$prefix$value$suffix", modifier = modifier, style = style, color = color)
 }
 
 /** An uppercase, wide-tracked caption — the instrument label voice. */
@@ -87,17 +158,25 @@ fun Caption(text: String, color: Color = MaterialTheme.colorScheme.onSurfaceVari
 fun SectionHeader(
     label: String,
     modifier: Modifier = Modifier,
-    channel: Color = Pulse.accent.base,
+    channel: Color? = null,
+    trailing: (@Composable () -> Unit)? = null,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         Box(
             Modifier
                 .size(width = 3.dp, height = 14.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(channel),
+                .background(channel ?: Pulse.accent.base),
         )
         Spacer(Modifier.width(8.dp))
-        Caption(label, color = MaterialTheme.colorScheme.onSurface)
+        // No-trailing path is byte-identical to the original (existing consumers unchanged).
+        if (trailing != null) {
+            Caption(label, color = MaterialTheme.colorScheme.onSurface)
+            Spacer(Modifier.weight(1f))
+            trailing()
+        } else {
+            Caption(label, color = MaterialTheme.colorScheme.onSurface)
+        }
     }
 }
 
@@ -105,25 +184,78 @@ fun SectionHeader(
 @Composable
 fun StatTile(
     label: String,
-    value: String,
+    value: String? = null,
     modifier: Modifier = Modifier,
     unit: String? = null,
-    channel: Color = Pulse.accent.base,
+    channel: Color? = null,
+    // Dense "metric" layout (Spotter): plain caption + small value, with an optional leading [icon],
+    // a rolling [animatedValue] (+ [valueSuffix]), a trailing [sparkline], and tap via [onClick].
+    // Left false, renders the standard tile (tick caption + prominent value + [unit]).
+    dense: Boolean = false,
+    animatedValue: Int? = null,
+    valueSuffix: String = "",
+    icon: (@Composable () -> Unit)? = null,
+    sparkline: List<Float>? = null,
+    onClick: (() -> Unit)? = null,
 ) {
-    PanelCard(modifier = modifier) {
-        Column {
-            SectionHeader(label, channel = channel)
-            Spacer(Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.Bottom) {
-                DataText(value, style = Pulse.dataType.dataMedium, color = channel)
-                if (unit != null) {
-                    Spacer(Modifier.width(4.dp))
-                    Text(
-                        unit,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 6.dp),
+    val ch = channel ?: Pulse.accent.base
+    if (dense) {
+        PanelCard(modifier = modifier, onClick = onClick, channel = channel, contentPadding = 14.dp) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(Pulse.spacing.xs),
+            ) {
+                Text(
+                    text = label.uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Pulse.spacing.xs),
+                ) {
+                    icon?.invoke()
+                    val valueColor = channel ?: MaterialTheme.colorScheme.onSurface
+                    if (animatedValue != null) {
+                        TickerNumber(
+                            target = animatedValue,
+                            suffix = valueSuffix,
+                            style = Pulse.dataType.dataSmall,
+                            color = valueColor,
+                        )
+                    } else {
+                        DataText(text = value.orEmpty(), style = Pulse.dataType.dataSmall, color = valueColor)
+                    }
+                }
+                if (sparkline != null && sparkline.size >= 2) {
+                    Sparkline(
+                        values = sparkline,
+                        channel = ch,
+                        asBars = false,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.fillMaxWidth().height(20.dp),
                     )
+                }
+            }
+        }
+    } else {
+        PanelCard(modifier = modifier) {
+            Column {
+                SectionHeader(label, channel = ch)
+                Spacer(Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.Bottom) {
+                    DataText(value.orEmpty(), style = Pulse.dataType.dataMedium, color = ch)
+                    if (unit != null) {
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            unit,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = 6.dp),
+                        )
+                    }
                 }
             }
         }
@@ -147,6 +279,12 @@ fun Sparkline(
     channel: Color = Pulse.accent.base,
     asBars: Boolean = true,
     normalizeMinMax: Boolean = true,
+    // Filled line-chart mode (pass a non-null [strokeWidth]): an inset polyline with an optional
+    // area fill and a double-dot emphasis on the last point — Spotter's stat-tile/record sparkline,
+    // distinct from the plain library line below. Left null, callers get the plain line.
+    strokeWidth: Dp? = null,
+    fill: Boolean = true,
+    emphasizeLast: Boolean = true,
 ) {
     val max = (values.maxOrNull() ?: 0f).coerceAtLeast(1f)
     val seriesMin = values.minOrNull() ?: 0f
@@ -168,6 +306,43 @@ fun Sparkline(
                     size = androidx.compose.ui.geometry.Size(barW, barH),
                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(barW / 2f, barW / 2f),
                 )
+            }
+        } else if (strokeWidth != null) {
+            // Filled line mode (Spotter): inset polyline + optional area fill + double-dot emphasis.
+            if (values.size < 2) return@Canvas
+            val strokePx = strokeWidth.toPx()
+            val r = range ?: 1f
+            val dotRadius = strokePx * 1.6f
+            val stepX = (w - dotRadius * 2) / (values.size - 1)
+            val usableH = h - dotRadius * 2
+            fun pointAt(i: Int): Offset {
+                val norm = (values[i] - seriesMin) / r
+                return Offset(dotRadius + stepX * i, dotRadius + usableH * (1f - norm))
+            }
+            val linePath = Path().apply {
+                moveTo(pointAt(0).x, pointAt(0).y)
+                for (i in 1 until values.size) lineTo(pointAt(i).x, pointAt(i).y)
+            }
+            if (fill) {
+                val area = Path().apply {
+                    addPath(linePath)
+                    lineTo(pointAt(values.size - 1).x, h)
+                    lineTo(pointAt(0).x, h)
+                    close()
+                }
+                drawPath(
+                    area,
+                    Brush.verticalGradient(listOf(channel.copy(alpha = 0.14f), Color.Transparent)),
+                )
+            }
+            drawPath(
+                linePath,
+                color = channel,
+                style = Stroke(width = strokePx, cap = StrokeCap.Round, join = StrokeJoin.Round),
+            )
+            if (emphasizeLast) {
+                drawCircle(channel.copy(alpha = 0.25f), radius = dotRadius * 2f, center = pointAt(values.size - 1))
+                drawCircle(channel, radius = dotRadius, center = pointAt(values.size - 1))
             }
         } else {
             val pad = h * 0.12f // keep the line off the very top/bottom edges
