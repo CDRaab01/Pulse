@@ -1,0 +1,30 @@
+version: 2
+
+# Weekly dependency updates for the shared pulse-ui library, grouped per ecosystem.
+# See host ROADMAP.md Tier 2 #2. The AGP / Kotlin / Compose-BOM versions are the suite's
+# source of truth (all consumers must match via composite build), so Dependabot must NOT
+# auto-bump them here — that's a deliberate, all-repos-in-one-sitting change. It may bump the
+# test/util libs (Roborazzi, Robolectric, JUnit, Coil, ...) freely.
+
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "com.android.tools.build:gradle"
+      - dependency-name: "org.jetbrains.kotlin:*"
+      - dependency-name: "androidx.compose:compose-bom"
+    groups:
+      gradle:
+        patterns: ["*"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
