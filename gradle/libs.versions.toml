@@ -1,9 +1,9 @@
 # Versions here MUST stay aligned with the consuming apps (Cookbook, and eventually
 # Spotter/Plate) — composite builds only stay binary-compatible when AGP/Kotlin/Compose match.
 [versions]
-agp = "8.5.0"
-kotlin = "2.0.0"
-coreKtx = "1.13.1"
+agp = "9.2.1"
+kotlin = "2.4.0"
+coreKtx = "1.19.0"
 composeBom = "2024.06.00"
 
 [libraries]
