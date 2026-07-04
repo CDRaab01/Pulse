@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: ["main"]
   workflow_dispatch:
+  schedule:
+    # Weekly bit-rot check (Mondays 10:00 UTC). Pulse has no deploy, so nothing ships from this.
+    - cron: "0 10 * * 1"
 
 jobs:
   build:
