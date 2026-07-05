@@ -37,6 +37,9 @@ Consequences:
 
 ## Rules of the library
 
+- **Update `ARCHITECTURE.md` in the same PR** when a change alters architecture — a component's
+  public API, a token's meaning, the module layout, or the consumer contract. Silently-drifting
+  docs are how a consumer app's API docs said `/plans` for a round (ROADMAP2 T2 #5c).
 - **Pulse knows hues and structure, never meaning.** Channel *semantics* (what blue/green/amber
   signify) belong in each app's own CompositionLocal layered over `PulseTheme`. Do not add
   app-domain names (protein, streak, heat…) to this repo.
