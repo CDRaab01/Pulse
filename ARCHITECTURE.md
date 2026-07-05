@@ -6,8 +6,9 @@ contents: [README.md](README.md).
 
 Pulse is the smallest repo in the suite and the one with the widest blast radius: one Android
 library module (`pulse-ui/` → `design.pulse:pulse-ui`), no app, **no tests of its own** — and
-four apps (Spotter, Plate, Cookbook, Dragonfly) consume it live via Gradle composite builds.
-It is never deployed; it ships inside its consumers' releases.
+four apps (Spotter, Plate, Cookbook, Dragonfly) consume it live via Gradle composite builds,
+plus a fifth (Magpie) reserved to join once its Android module is scaffolded. It is never
+deployed; it ships inside its consumers' releases.
 
 ## Consumption model (why every change here is a four-app change)
 
@@ -38,7 +39,7 @@ Consequences:
 
 | File | Owns |
 |---|---|
-| `PulseTheme.kt` | The entry point: `PulseTheme(darkTheme, accent: PulseAccent)` — each app picks its lead accent (Spotter Blue, Plate Green, Cookbook Amber, Dragonfly Violet) and layers its own domain-channel CompositionLocal on top |
+| `PulseTheme.kt` | The entry point: `PulseTheme(darkTheme, accent: PulseAccent)` — each app picks its lead accent (Spotter Blue, Plate Green, Cookbook Amber, Dragonfly Violet, Magpie Teal — added 2026-07-04) and layers its own domain-channel CompositionLocal on top |
 | `Palette.kt`, `Schemes.kt` | The shared hue families + M3 color schemes (dark-first OLED; contrast-safe light variants) |
 | `Type.kt`, `DataType.kt` | UI type scale (Space Grotesk / Inter) + the mono data scale (JetBrains Mono for every numeral). **Fonts are static per-weight instances — never variable fonts** (real-device rendering bug) |
 | `Motion.kt`, `Shape.kt`, `Dimens.kt`, `Structure.kt` | Motion tokens (Fast/Standard/Emphasized/Data + easings), 8/12/16dp shapes, spacing, panel/hairline structural tokens (depth = stroke + tone, not shadows) |

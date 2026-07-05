@@ -12,6 +12,7 @@ about the responsibilities that come with editing a library four apps depend on.
 | Dragonfly (hub) | composite build | Violet |
 | Spotter | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | Blue |
 | Plate | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | **Green** |
+| Magpie | composite build (planned — repo founded 2026-07-04, Android not yet scaffolded) | **Teal** |
 | Hawksnest | CSS port only (`src/theme/tokens.css`) — web can't consume a Compose lib | (dark-only web) |
 
 Consequences:
@@ -46,8 +47,9 @@ Consequences:
 - **Static per-weight font instances only** — never variable fonts (some devices render the
   lightest master for everything). The fonts are Space Grotesk / Inter / JetBrains Mono
   (slashed-zero monospace numerals are part of the identity).
-- Accent leads are claimed: blue = Spotter, green = Plate, amber = Cookbook, violet = Dragonfly.
-  A new app picks an unclaimed accent and registers it here.
+- Accent leads are claimed: blue = Spotter, green = Plate, amber = Cookbook, violet = Dragonfly,
+  teal = Magpie (added 2026-07-04, ahead of Magpie's Android scaffold — the accent is reserved
+  even though no consumer exists yet). A new app picks an unclaimed accent and registers it here.
 - Publishing to a real Maven repo can replace the composite build later without consumers
   changing their dependency coordinates — that's the intended evolution if the sibling-checkout
   requirement becomes painful.

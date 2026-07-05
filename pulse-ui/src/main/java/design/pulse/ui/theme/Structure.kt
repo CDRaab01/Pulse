@@ -41,7 +41,7 @@ data class PulseStructure(
 )
 
 /** Which reference hue leads the app — drives the M3 primary family, hero gradient and accent channel. */
-enum class PulseAccent { Blue, Amber, Green, Violet }
+enum class PulseAccent { Blue, Amber, Green, Violet, Teal }
 
 // Channel triples, shared verbatim across the family (values from the original PULSE build).
 
@@ -49,17 +49,20 @@ fun darkBlueChannel() = PulseChannel(PulseBlue, Color(0xFF151C33), Color(0xFFFFF
 fun darkGreenChannel() = PulseChannel(PulseGreen, Color(0xFF11332A), Color(0xFF00301F))
 fun darkAmberChannel() = PulseChannel(PulseOrange, Color(0xFF3B2418), Color(0xFF2B1100))
 fun darkVioletChannel() = PulseChannel(PulseViolet, Color(0xFF231F3F), Color(0xFF120A38))
+fun darkTealChannel() = PulseChannel(PulseTeal, Color(0xFF0F2E2B), Color(0xFF00312D))
 
 fun lightBlueChannel() = PulseChannel(PulseBlueDeep, Color(0xFFECF1FF), Color(0xFFFFFFFF))
 fun lightGreenChannel() = PulseChannel(PulseGreenDeep, Color(0xFFD8F3E8), Color(0xFFFFFFFF))
 fun lightAmberChannel() = PulseChannel(PulseOrangeDeep, Color(0xFFFBE3D4), Color(0xFFFFFFFF))
 fun lightVioletChannel() = PulseChannel(PulseVioletDeep, Color(0xFFE6E2FB), Color(0xFFFFFFFF))
+fun lightTealChannel() = PulseChannel(PulseTealDeep, Color(0xFFD5F3EF), Color(0xFFFFFFFF))
 
 fun darkChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Blue -> darkBlueChannel()
     PulseAccent.Amber -> darkAmberChannel()
     PulseAccent.Green -> darkGreenChannel()
     PulseAccent.Violet -> darkVioletChannel()
+    PulseAccent.Teal -> darkTealChannel()
 }
 
 fun lightChannel(accent: PulseAccent): PulseChannel = when (accent) {
@@ -67,6 +70,7 @@ fun lightChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Amber -> lightAmberChannel()
     PulseAccent.Green -> lightGreenChannel()
     PulseAccent.Violet -> lightVioletChannel()
+    PulseAccent.Teal -> lightTealChannel()
 }
 
 // Hero gradients per accent. The dark blue hero uses the deeper hues so white headline text
@@ -84,6 +88,14 @@ private fun heroGradient(accent: PulseAccent, dark: Boolean): Brush = when (acce
     PulseAccent.Violet ->
         if (dark) Brush.linearGradient(listOf(PulseIndigo, PulseViolet))
         else Brush.linearGradient(listOf(PulseIndigoDeep, PulseVioletDeep))
+    // Teal hero is a 3-stop indigo→teal→green sweep (the "magpie" gradient) — a nod to the
+    // structural iridescence on a real magpie's wing, which shifts blue→teal→green under
+    // raking light rather than sitting on one hue. Deep hues in both modes (the Green
+    // precedent): PulseIndigoDeep and PulseGreenDeep already clear 4.5:1 for white headline
+    // text elsewhere (Dragonfly's light-mode hero, and the Green hero above); PulseTealDeep
+    // sits tonally between them, so the white-text guarantee holds across the whole sweep.
+    PulseAccent.Teal ->
+        Brush.linearGradient(listOf(PulseIndigoDeep, PulseTealDeep, PulseGreenDeep))
 }
 
 private fun energyGradient(dark: Boolean): Brush =
