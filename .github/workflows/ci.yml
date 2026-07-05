@@ -33,3 +33,33 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
       - run: echo "sdk.dir=$ANDROID_HOME" > local.properties
       - run: ./gradlew :pulse-ui:assembleRelease --no-daemon
+
+  # Consumer gate: :pulse-ui:assemble alone skips checkDebugAarMetadata, so it can't catch a
+  # change here that breaks a consumer's build (the core-ktx 1.19 incident). Build the cheapest
+  # consumer (Cookbook) against THIS Pulse checkout via the composite build, so consumer breakage
+  # fails Pulse CI here instead of the four apps' main. ROADMAP2 Tier 1 #8.
+  consumer-build:
+    name: "Consumer build (Cookbook :app:assembleDebug)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: Pulse                       # the PR's Pulse — what Cookbook's composite build consumes
+      - uses: actions/checkout@v7
+        with:
+          repository: CDRaab01/Cookbook     # Cookbook/android's settings does includeBuild("../../Pulse")
+          path: Cookbook
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Write local.properties
+        working-directory: Cookbook/android
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "server.url=https://cookbook.dragonflymedia.org/" >> local.properties
+      - name: Assemble Cookbook against this Pulse
+        working-directory: Cookbook/android
+        run: ./gradlew :app:assembleDebug --no-daemon
