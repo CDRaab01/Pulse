@@ -20,6 +20,22 @@ jobs:
           fetch-depth: 0   # full history so a secret in any past commit is caught
       - run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source /repo --redact --no-banner
 
+  # Machine-readable API contract: pulse-index.json must stay in lockstep with the component
+  # source and the curated pulse-meta.json (see AGENTS.md). Parses .kt text only — no Android SDK
+  # or Gradle needed, so it's a fast standalone JDK job. Fails if the committed index is stale or
+  # a component is missing/orphaned in the sidecar; fix with `java tools/PulseIndex.java generate`.
+  index-drift:
+    name: "Component index (pulse-index.json)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - run: java tools/PulseIndex.java verify .
+
   build:
     name: "pulse-ui — Assemble"
     runs-on: ubuntu-latest

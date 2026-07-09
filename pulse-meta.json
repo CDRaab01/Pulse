@@ -1,0 +1,137 @@
+{
+  "_comment": "Curated semantics for the Pulse component index. HAND-OWNED. The structural facts (param names, types, whether they have defaults) are PARSED FROM SOURCE by tools/PulseIndex.java and must NOT be duplicated here — this file only carries what source cannot express: role, perfTier, since, and agent-adaptation guidance. Every public component in pulse-ui/src/main/java/design/pulse/ui/components/ must have an entry here or the drift-check fails.",
+
+  "defaults": {
+    "agentMeta": {
+      "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+      "neverDo": [
+        "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+        "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+        "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+        "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+      ],
+      "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+    }
+  },
+
+  "components": {
+    "PanelCard": {
+      "role": "surface",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "params": {
+        "onClick": { "since": "2026-07-03" },
+        "channel": { "since": "2026-07-03" },
+        "tint": { "since": "2026-07-03" },
+        "raised": { "since": "2026-07-03" },
+        "containerColor": { "since": "2026-07-03" },
+        "contentPadding": { "since": "2026-07-03" }
+      }
+    },
+    "DataText": {
+      "role": "data-readout",
+      "since": "0.1.0",
+      "perfTier": "cheap"
+    },
+    "TickerNumber": {
+      "role": "data-readout",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "neverDoExtra": [
+          "Do not use for text that changes every frame — the roll animates on the DATA motion (~600ms) and is meant for occasional, measured updates."
+        ]
+      }
+    },
+    "Caption": {
+      "role": "label",
+      "since": "0.1.0",
+      "perfTier": "cheap"
+    },
+    "SectionHeader": {
+      "role": "header",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "params": {
+        "trailing": { "since": "2026-07-03" }
+      }
+    },
+    "StatTile": {
+      "role": "metric-display",
+      "since": "0.1.0",
+      "perfTier": "conditional",
+      "agentMeta": {
+        "neverDoExtra": [
+          "'conditional' perfTier: this tile is static UNLESS you pass animatedValue (rolls via TickerNumber) or sparkline. Prefer the static form unless a live metric genuinely needs motion.",
+          "The dense metric layout is opt-in via dense=true; leaving it false must stay pixel-identical to the standard tile."
+        ]
+      },
+      "params": {
+        "dense": { "since": "2026-07-03" },
+        "animatedValue": { "since": "2026-07-03" },
+        "valueSuffix": { "since": "2026-07-03" },
+        "icon": { "since": "2026-07-03" },
+        "sparkline": { "since": "2026-07-03" },
+        "onClick": { "since": "2026-07-03" }
+      }
+    },
+    "Sparkline": {
+      "role": "chart",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "neverDoExtra": [
+          "Do NOT assume Sparkline self-animates — it is a pure Canvas draw with no internal animation. Any motion comes from the caller changing the values list.",
+          "asBars=true scales bars to the series max from a zero baseline; asBars=false draws a line (min-max normalized by default). Pass a non-null strokeWidth for the filled line-chart mode."
+        ]
+      },
+      "params": {
+        "strokeWidth": { "since": "2026-07-03" },
+        "fill": { "since": "2026-07-03" },
+        "emphasizeLast": { "since": "2026-07-03" }
+      }
+    },
+    "ChannelDot": {
+      "role": "indicator",
+      "since": "0.1.0",
+      "perfTier": "cheap"
+    },
+    "EmptyState": {
+      "role": "empty-state",
+      "since": "0.1.0",
+      "perfTier": "cheap"
+    },
+    "PulseButton": {
+      "role": "action",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "Add new parameters only, each defaulted. Use one hero PulseButton per screen; secondary actions take tonal=true (channel dim fill, channel text) or a plain M3 button.",
+        "neverDoExtra": [
+          "Switch the button's voice with the gradient param (e.g. Pulse.structure.energyGradient), not by hard-coding a Brush of literal colors."
+        ]
+      }
+    },
+    "ProgressRing": {
+      "role": "progress",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "neverDoExtra": [
+          "The center is a content slot — put a DataText readout in it rather than overlaying your own absolutely-positioned text."
+        ]
+      }
+    },
+    "pressScale": {
+      "role": "interaction-modifier",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "This is a Modifier extension, not a composable. Feed it the same MutableInteractionSource as the click handler so the spring tracks real presses.",
+        "neverDoExtra": [
+          "Do not stack multiple pressScale modifiers on one element."
+        ]
+      }
+    }
+  }
+}
