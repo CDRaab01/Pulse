@@ -58,12 +58,40 @@ etc.) stay app-side** in each `ui/theme/<App>Theme.kt`. If a component exists in
 promote it here as a superset; never let in-tree copies reappear (that drift is what this repo
 was created to kill).
 
+## Machine-readable API surface (`pulse-index.json`)
+
+Pulse's public component API is also published as a machine-readable index so the **consumer apps'
+coding agents can retrieve and reuse components instead of regenerating UI or re-reading prose**.
+This is the agent-facing distribution layer that the composite build alone doesn't provide (the
+four consumers take the code, but nothing structured tells an agent in Cookbook that `StatTile` has
+a `dense` mode or that params are additive-with-defaults). Consumer-facing usage: [AGENTS.md](AGENTS.md).
+
+| File | Role |
+|---|---|
+| `pulse-index.json` | **Generated, committed.** One entry per public component: package/file, full param list (name/type/`hasDefault`/`required`), a one-line summary from the KDoc, and merged `agentMeta`. Also carries `accents` (parsed from `PulseAccent`) and `pulseVersion`. This is what agents read. |
+| `pulse-meta.json` | **Hand-curated sidecar.** The semantics source can't express: `role`, `perfTier` (`cheap`/`moderate`/`conditional`), `since`, per-param `since`, and `agentMeta` (extend / neverDo / meaningVia). Shared defaults + per-component overrides. |
+| `tools/PulseIndex.java` | Single-file, dependency-free JDK-17 tool. `generate` writes the index; `verify` fails on drift. **Structure is parsed from the `.kt` source so the index cannot lie about the API; only semantics are authored.** No Android SDK, KSP, or Gradle needed. |
+
+Contract, enforced by CI's `index-drift` job (`java tools/PulseIndex.java verify .`):
+
+- Change a component's signature (add/remove/rename a param) → the committed index goes stale →
+  `verify` fails until you `generate` and commit.
+- Add a new public component → it **must** get a `pulse-meta.json` entry (role/perfTier/since) or
+  `verify` fails; a sidecar entry with no matching component (a rename/removal left behind) also fails.
+- The index adds **zero runtime code and zero public API** — it lives outside `src/main`, so the AAR
+  is byte-identical and consumers stay pixel-identical. A KSP processor was rejected: AGP 9's built-in
+  Kotlin (no `kotlin.android` plugin) makes KSP an unproven spike, and the drift-check gives the same
+  "can't lie" guarantee without it. Publishing it *inside* the AAR (assets) is a possible later step.
+
 ## How to change Pulse safely
 
 1. Make the change; keep parameter additions defaulted so existing call sites compile and render
    identically.
-2. Build a consumer against it: `cd ../Cookbook/android && ./gradlew assembleDebug` (composite
+2. If you touched a public component's signature (or added/removed one), update `pulse-meta.json`
+   as needed, then `java tools/PulseIndex.java generate` and commit `pulse-index.json`
+   (`verify` is the CI gate).
+3. Build a consumer against it: `cd ../Cookbook/android && ./gradlew assembleDebug` (composite
    build picks up your working tree automatically).
-3. If visuals moved intentionally, re-record the affected consumers' Roborazzi baselines in the
+4. If visuals moved intentionally, re-record the affected consumers' Roborazzi baselines in the
    same coordinated change window; if they moved unintentionally, that's your regression signal.
-4. Push Pulse first, then any consumer changes — consumer CI checks out Pulse `main`.
+5. Push Pulse first, then any consumer changes — consumer CI checks out Pulse `main`.

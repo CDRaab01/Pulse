@@ -32,7 +32,7 @@ Consequences:
   params are additive with backward-compatible defaults, so the leaner callers stay pixel-identical —
   keep it that way (verify all four apps' Roborazzi when touching a shared component).
 - **Version alignment is load-bearing:** consumers' AGP/Kotlin/Compose-BOM must match
-  `gradle/libs.versions.toml` here (currently AGP 8.5.0 / Kotlin 2.0.0 / BOM 2024.06.00).
+  `gradle/libs.versions.toml` here (currently AGP 9.1.1 / Kotlin 2.2.10 / BOM 2026.06.01).
   Composite builds are only binary-compatible on matching versions. Bumping any of these is a
   suite-wide, all-repos-in-one-sitting change.
 
@@ -41,6 +41,12 @@ Consequences:
 - **Update `ARCHITECTURE.md` in the same PR** when a change alters architecture — a component's
   public API, a token's meaning, the module layout, or the consumer contract. Silently-drifting
   docs are how a consumer app's API docs said `/plans` for a round (ROADMAP2 T2 #5c).
+- **`pulse-index.json` is a generated contract — regenerate it in the same PR** when you add,
+  remove, or re-signature a public component, or add a new one. Structure is parsed from source by
+  `tools/PulseIndex.java`; semantics (role/perfTier/since/agent-guidance) are hand-curated in
+  `pulse-meta.json`. A new component **must** get a `pulse-meta.json` entry or CI's `index-drift`
+  job fails. This is the retrieval layer consumer agents read instead of guessing at the API — see
+  [AGENTS.md](AGENTS.md). Run `java tools/PulseIndex.java generate` and commit the result.
 - **Pulse knows hues and structure, never meaning.** Channel *semantics* (what blue/green/amber
   signify) belong in each app's own CompositionLocal layered over `PulseTheme`. Do not add
   app-domain names (protein, streak, heat…) to this repo.
@@ -57,7 +63,11 @@ Consequences:
 ## Verify a change
 
 ```powershell
-./gradlew :pulse-ui:assembleRelease          # here
+java tools/PulseIndex.java verify .           # component index in lockstep with source (fast, no SDK)
+./gradlew :pulse-ui:assembleRelease           # here
 cd ../Cookbook/android; ./gradlew :app:assembleDebug   # cheapest consumer check
 cd ../../Dragonfly/android; ./gradlew :app:assembleDebug
 ```
+
+If the index check fails after an intentional API change, run `java tools/PulseIndex.java generate`
+and commit `pulse-index.json`.

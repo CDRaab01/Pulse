@@ -1,0 +1,712 @@
+{
+  "schemaVersion": 1,
+  "generator": "tools/PulseIndex.java",
+  "pulseVersion": "0.1.0",
+  "accents": [
+    "Blue",
+    "Amber",
+    "Green",
+    "Violet",
+    "Teal"
+  ],
+  "componentCount": 12,
+  "components": [
+    {
+      "name": "PanelCard",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "surface",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "A flat, hairline-stroked surface — the base container for everything.",
+      "params": [
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "onClick",
+          "type": "(() -> Unit)?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "channel",
+          "type": "Color?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "tint",
+          "type": "Color?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "raised",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "containerColor",
+          "type": "Color?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "contentPadding",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "content",
+          "type": "@Composable ColumnScope.() -> Unit",
+          "hasDefault": false,
+          "required": true
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "DataText",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "data-readout",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "A monospace numeric readout.",
+      "params": [
+        {
+          "name": "text",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "style",
+          "type": "TextStyle",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "TickerNumber",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "data-readout",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "summary": "A DataText readout that rolls up to target when it first appears (and sweeps between values on change), on the slower data easing so the number feels measured rather than printed.",
+      "params": [
+        {
+          "name": "target",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "style",
+          "type": "TextStyle",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "prefix",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "suffix",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not use for text that changes every frame — the roll animates on the DATA motion (~600ms) and is meant for occasional, measured updates."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "Caption",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "label",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "An uppercase, wide-tracked caption — the instrument label voice.",
+      "params": [
+        {
+          "name": "text",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "color",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "SectionHeader",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "header",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "Section header: a channel-colored tick followed by an uppercase label.",
+      "params": [
+        {
+          "name": "label",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "trailing",
+          "type": "(@Composable () -> Unit)?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "StatTile",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "metric-display",
+      "since": "0.1.0",
+      "perfTier": "conditional",
+      "summary": "A stat tile: caption + big mono value (+ optional unit), tinted by its channel.",
+      "params": [
+        {
+          "name": "label",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "unit",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "dense",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "animatedValue",
+          "type": "Int?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "valueSuffix",
+          "type": "String",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "icon",
+          "type": "(@Composable () -> Unit)?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "sparkline",
+          "type": "List<Float>?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "onClick",
+          "type": "(() -> Unit)?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "'conditional' perfTier: this tile is static UNLESS you pass animatedValue (rolls via TickerNumber) or sparkline. Prefer the static form unless a live metric genuinely needs motion.",
+          "The dense metric layout is opt-in via dense=true; leaving it false must stay pixel-identical to the standard tile."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "Sparkline",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "chart",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "A minimal sparkline / bar series.",
+      "params": [
+        {
+          "name": "values",
+          "type": "List<Float>",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "asBars",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "normalizeMinMax",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "strokeWidth",
+          "type": "Dp?",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "fill",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        },
+        {
+          "name": "emphasizeLast",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false,
+          "since": "2026-07-03"
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do NOT assume Sparkline self-animates — it is a pure Canvas draw with no internal animation. Any motion comes from the caller changing the values list.",
+          "asBars=true scales bars to the series max from a zero baseline; asBars=false draws a line (min-max normalized by default). Pass a non-null strokeWidth for the filled line-chart mode."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "ChannelDot",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "indicator",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "A small filled dot — used inline for channel legends.",
+      "params": [
+        {
+          "name": "color",
+          "type": "Color",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "size",
+          "type": "androidx.compose.ui.unit.Dp",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "EmptyState",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "empty-state",
+      "since": "0.1.0",
+      "perfTier": "cheap",
+      "summary": "Friendly empty state: icon in a tinted circle, bold title, optional subtitle.",
+      "params": [
+        {
+          "name": "icon",
+          "type": "ImageVector",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "subtitle",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseButton",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseButton.kt",
+      "role": "action",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "summary": "The primary action: the app's hero gradient with press-scale and ripple.",
+      "params": [
+        {
+          "name": "text",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onClick",
+          "type": "() -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "tonal",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "compact",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "gradient",
+          "type": "Brush?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "onChannel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "dimChannel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "leadingIcon",
+          "type": "(@Composable () -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each defaulted. Use one hero PulseButton per screen; secondary actions take tonal=true (channel dim fill, channel text) or a plain M3 button.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Switch the button's voice with the gradient param (e.g. Pulse.structure.energyGradient), not by hard-coding a Brush of literal colors."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "ProgressRing",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "ProgressRing.kt",
+      "role": "progress",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "summary": "The instrument-panel ring: a hairline track with a round-capped channel arc and an optional soft glow behind the arc.",
+      "params": [
+        {
+          "name": "progress",
+          "type": "Float",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "strokeWidth",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "glow",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "content",
+          "type": "(@Composable BoxScope.() -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "The center is a content slot — put a DataText readout in it rather than overlaying your own absolutely-positioned text."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "pressScale",
+      "kind": "modifier",
+      "receiver": "Modifier",
+      "package": "design.pulse.ui.components",
+      "file": "Modifiers.kt",
+      "role": "interaction-modifier",
+      "since": "0.1.0",
+      "perfTier": "moderate",
+      "summary": "Tactile press feedback: the element springs down slightly while pressed.",
+      "params": [
+        {
+          "name": "interactionSource",
+          "type": "MutableInteractionSource",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "pressedScale",
+          "type": "Float",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "This is a Modifier extension, not a composable. Feed it the same MutableInteractionSource as the click handler so the spring tracks real presses.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not stack multiple pressScale modifiers on one element."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    }
+  ]
+}
