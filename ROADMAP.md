@@ -30,11 +30,65 @@ repo's backlog:
    source of truth (AGP 9.1.1 / Kotlin 2.2.10 / BOM 2026.06.01). Lesson: docs must point at the
    file, not restate its values — restated numbers rot.
 
+## Tier P2 — the premium layer (added 2026-07-14; the "looks expensive" round)
+
+Tier P hardens what exists; this tier adds the layers *around* components where commercial
+polish actually lives. Grounded in an audit of the consumers: apps follow system dark/light but
+offer **no in-app theme choice**, **no themed splash screens**, haptics used in exactly 2 files
+across Spotter+Plate, and every app hand-rolls its larger charts. Ranked by wow-per-effort:
+
+5. **Semantic haptics vocabulary (`PulseHaptics`).** Tokens — `confirm`, `tick` (rest-timer /
+   rep counts), `celebrate`, `warning` — paired to `PulseMotion` so animation and vibration fire
+   together (Hawksnest's semantic-haptics work is the precedent; the Compose apps barely
+   vibrate). Premium feel is multi-sensory, and this is the cheapest lever left.
+   *Done when:* two apps ship interactions using the same named haptic + motion pair.
+6. **Themed splash screens.** One Pulse recipe for the Android 12+ SplashScreen API
+   (accent-tinted icon reveal on the dark field); apply per app (~an hour each — none use it
+   today). First impression of every single launch. *Done when:* all five Compose apps launch
+   through it.
+7. **Appearance scaffold (Dark/Light/System).** The light schemes exist in `Schemes.kt` but only
+   the OS can choose. A Pulse-side preference + segmented-control pattern (Hawksnest Settings is
+   the model) so all five apps gain the toggle identically — and the suite bar's "dark/light
+   parity" becomes demonstrable, not latent. *Done when:* every app has Settings → Appearance
+   and honors it.
+8. **`HeatCalendar`** (GitHub-contribution style) — the most "serious tool" chart there is:
+   Spotter training consistency, Plate logging streaks, Magpie spending-by-day, one component.
+   Entrance on the DATA motion spec. *Done when:* it ships in two apps from the same component.
+9. **Unified chart kit (`PulseChart` layer).** `Sparkline` + `ProgressRing` are here; the bigger
+   charts (Spotter progress, Plate trends, Magpie trends) are three hand-rolled dialects. One
+   bar/line-with-area kit sharing a single draw-in entrance (DATA 600 ms), the mono data face
+   for axes/labels, one tooltip treatment. Charts are where "one developer" vs "a team" is most
+   visible. *Done when:* the three apps' headline charts render through it with baselines.
+10. **Screen-transition vocabulary.** `Motion.kt` owns durations/easings but nothing owns
+    *navigation*; each app uses defaults. A nav-transition set (shared-axis forward/back,
+    fade-through for tab switches) consumed suite-wide. *Done when:* two apps navigate with it
+    and it's in the consumer contract docs.
+11. **App icon family** — six icons, one geometry language, per-app accent on the shared dark
+    field; the home-screen row is the suite's storefront (Magpie's icon is on record as
+    "acceptable, not perfect"; the set was never designed together). Design task more than code;
+    the launcher-icon assets live in each app repo, the geometry spec lives here.
+    *Done when:* all six icons visibly share one language on a real launcher.
+12. **Empty-state glyph set** — 8–10 geometric line-art glyphs in one stroke style (barbell,
+    plate, pot, nest, magpie…) to feed `EmptyState`; kills the last bare-feeling screens.
+    Glyphs are structure, not meaning — apps pick which glyph means what.
+13. **`HeroPanel` promotion** — Plate's gradient hero and Magpie's Tier-4 hero are near-identical
+    app-side inventions; standardize the one component (gradient rules from the accent, not
+    hand-picked colors).
+14. **Pull-to-refresh indicator skin** — the stock Material spinner is the one visibly non-Pulse
+    element in every scroll view; skin it once.
+
+Suggested order: 5–7 first (quick, touch every interaction), then 9 and 11 (the two loudest
+"team built this" signals), 8/10/12–14 opportunistically as app rounds consume them.
+
 ## Explicitly not worth it
 
 - A real versioning/publishing story (Maven, version pins) — consumers deliberately float on
   `main` via composite build; per-repo blast radius is handled by the consumer-build CI gate.
   Revisit only if a polish rollout actually needs a consumer pinned to older Pulse.
 - Meaning-bearing components (a "WorkoutCard", a "BudgetRow") — semantics stay app-side, always.
+- **Material You / dynamic color** — Pulse IS the brand; letting the wallpaper recolor it
+  dissolves the identity the suite is built on (added 2026-07-14).
+- **Skeleton loaders** — the suite deliberately standardized on the centered spinner (Magpie
+  Tier 4 record). Revisit only as a deliberate suite-wide swap, never per-app (added 2026-07-14).
 - Hawksnest convergence — the CSS port stays a hand-synced port; a shared token pipeline is not
   worth the tooling for one web consumer.
