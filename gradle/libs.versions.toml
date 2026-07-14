@@ -11,6 +11,11 @@ composeBom = "2026.06.01"
 # adoption is a zero-visual-diff swap. This is the one third-party runtime dependency Pulse carries —
 # delight-motion is a first-class Pulse concern (see Structure.kt energyGradient), not app-local.
 konfetti = "2.0.5"
+# Screenshot-test stack — pinned to the suite's proven versions (Cookbook/Plate) so pulse-ui's
+# baselines render the same way the consumers' do.
+junit = "4.13.2"
+robolectric = "4.16.1"
+roborazzi = "1.65.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -20,6 +25,13 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 konfetti-compose = { group = "nl.dionsegijn", name = "konfetti-compose", version.ref = "konfetti" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }

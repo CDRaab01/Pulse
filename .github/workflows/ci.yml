@@ -50,6 +50,31 @@ jobs:
       - run: echo "sdk.dir=$ANDROID_HOME" > local.properties
       - run: ./gradlew :pulse-ui:assembleRelease --no-daemon
 
+  # Component screenshot baselines (Robolectric native graphics + Roborazzi). Catches a visual
+  # change in a shared component HERE, in Pulse CI, instead of as a diff in four consumers'
+  # baselines later (ROADMAP Tier P #2). Verifies committed PNGs in pulse-ui/screenshots/; regenerate
+  # locally with `./gradlew :pulse-ui:testDebugUnitTest -Proborazzi.test.record=true` and eyeball
+  # them before committing.
+  screenshots:
+    name: "Screenshot baselines (Roborazzi verify)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v6
+      - run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+      - run: ./gradlew :pulse-ui:testDebugUnitTest -Proborazzi.test.verify=true --no-daemon
+      - name: Upload diffs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roborazzi-diffs
+          path: pulse-ui/build/outputs/roborazzi/
+
   # Consumer gate: :pulse-ui:assemble alone skips checkDebugAarMetadata, so it can't catch a
   # change here that breaks a consumer's build (the core-ktx 1.19 incident). Build the cheapest
   # consumer (Cookbook) against THIS Pulse checkout via the composite build, so consumer breakage

@@ -23,6 +23,19 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+// Roborazzi record/verify/compare are driven by system properties (no Gradle plugin needed — the
+// suite pattern): `./gradlew :pulse-ui:testDebugUnitTest -Proborazzi.test.record=true` to record,
+// `-Proborazzi.test.verify=true` to gate. Baselines land in pulse-ui/screenshots/.
+tasks.withType<Test>().configureEach {
+    listOf("roborazzi.test.record", "roborazzi.test.verify", "roborazzi.test.compare").forEach { key ->
+        (project.findProperty(key) as String?)?.let { systemProperty(key, it) }
+    }
 }
 
 dependencies {
@@ -36,4 +49,16 @@ dependencies {
     // is standardized, not re-invented per app. `implementation`, not `api`: consumers call
     // ConfettiHost, never konfetti types directly, so konfetti stays off their compile classpath.
     implementation(libs.konfetti.compose)
+
+    // Screenshot tests — Robolectric native graphics + Roborazzi (no device). See ScreenshotTest.
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.rule)
+    // Provides the ComponentActivity that createComposeRule() launches — a library module has no
+    // launcher activity of its own, so Robolectric can't resolve one without this.
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
