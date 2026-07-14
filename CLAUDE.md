@@ -32,7 +32,8 @@ Consequences:
   params are additive with backward-compatible defaults, so the leaner callers stay pixel-identical —
   keep it that way (verify all four apps' Roborazzi when touching a shared component).
 - **Version alignment is load-bearing:** consumers' AGP/Kotlin/Compose-BOM must match
-  `gradle/libs.versions.toml` here (currently AGP 9.1.1 / Kotlin 2.2.10 / BOM 2026.06.01).
+  `gradle/libs.versions.toml` here (currently AGP 9.1.1 / Kotlin 2.2.10 / BOM 2026.06.01 —
+  that file is the source of truth if this line ever drifts again).
   Composite builds are only binary-compatible on matching versions. Bumping any of these is a
   suite-wide, all-repos-in-one-sitting change.
 
