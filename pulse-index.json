@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 23,
+  "componentCount": 24,
   "components": [
     {
       "name": "ConfettiHost",
@@ -1253,6 +1253,65 @@
           "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
           "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseRefreshBox",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "RefreshBox.kt",
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "Pull-to-refresh, skinned to Pulse — the stock Material spinner is the one visibly non-Pulse element in every scroll view, so wrap it once here: the indicator's arrow/arc takes the channel color and the puck takes the panel tone, matching the flat, channel-colored language everything else uses.",
+      "params": [
+        {
+          "name": "isRefreshing",
+          "type": "Boolean",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onRefresh",
+          "type": "() -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "state",
+          "type": "PullToRefreshState",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "content",
+          "type": "@Composable BoxScope.() -> Unit",
+          "hasDefault": false,
+          "required": true
+        }
+      ],
+      "agentMeta": {
+        "extend": "A channel-skinned pull-to-refresh wrapper over Material3's PullToRefreshBox. Content is a BoxScope. Pass a channel to tint the indicator to a data domain.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not use the raw Material PullToRefreshBox with the default indicator — its spinner is the one un-Pulse element in a scroll view; this wrapper is why it exists."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }

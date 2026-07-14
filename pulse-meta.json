@@ -252,6 +252,17 @@
           "Do not hand-build the gradient from literal colors — use structure.heroGradient / structure.energyGradient so it tracks the app accent."
         ]
       }
+    },
+    "PulseRefreshBox": {
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "A channel-skinned pull-to-refresh wrapper over Material3's PullToRefreshBox. Content is a BoxScope. Pass a channel to tint the indicator to a data domain.",
+        "neverDoExtra": [
+          "Do not use the raw Material PullToRefreshBox with the default indicator — its spinner is the one un-Pulse element in a scroll view; this wrapper is why it exists."
+        ]
+      }
     }
   }
 }
