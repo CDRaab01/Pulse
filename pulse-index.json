@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 22,
+  "componentCount": 23,
   "components": [
     {
       "name": "ConfettiHost",
@@ -267,6 +267,54 @@
           "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
           "For a tiny inline trend use Sparkline (line mode) instead — this is the full-height version with the draw-in reveal."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "HeroPanel",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "HeroPanel.kt",
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "summary": "The hero panel — a gradient-filled greeting/CTA surface, the app's lead voice at the top of a screen.",
+      "params": [
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "gradient",
+          "type": "Brush",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "contentPadding",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "content",
+          "type": "@Composable ColumnScope.() -> Unit",
+          "hasDefault": false,
+          "required": true
+        }
+      ],
+      "agentMeta": {
+        "extend": "The gradient greeting/CTA surface. Defaults to structure.heroGradient (the accent's lead voice); pass structure.energyGradient for the celebration voice, or any Brush. Content is a ColumnScope.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Hero text sits on a gradient, not the surface scheme — set content colors for the gradient (typically light/on-gradient) rather than relying on onSurface.",
+          "Do not hand-build the gradient from literal colors — use structure.heroGradient / structure.energyGradient so it tracks the app accent."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }

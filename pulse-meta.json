@@ -240,6 +240,18 @@
           "For a tiny inline trend use Sparkline (line mode) instead — this is the full-height version with the draw-in reveal."
         ]
       }
+    },
+    "HeroPanel": {
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "The gradient greeting/CTA surface. Defaults to structure.heroGradient (the accent's lead voice); pass structure.energyGradient for the celebration voice, or any Brush. Content is a ColumnScope.",
+        "neverDoExtra": [
+          "Hero text sits on a gradient, not the surface scheme — set content colors for the gradient (typically light/on-gradient) rather than relying on onSurface.",
+          "Do not hand-build the gradient from literal colors — use structure.heroGradient / structure.energyGradient so it tracks the app accent."
+        ]
+      }
     }
   }
 }
