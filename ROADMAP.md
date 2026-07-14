@@ -80,6 +80,32 @@ across Spotter+Plate, and every app hand-rolls its larger charts. Ranked by wow-
 Suggested order: 5–7 first (quick, touch every interaction), then 9 and 11 (the two loudest
 "team built this" signals), 8/10/12–14 opportunistically as app rounds consume them.
 
+## How consumers adopt a new Pulse capability (the rollout recipe)
+
+There is **no upgrade step** — all five Compose apps composite-build against the sibling
+checkout, so anything merged to `main` here is *available* to their next build automatically
+(CI checks out Pulse `main` as a sibling; local dev uses whatever `C:\Code\Pulse` has — pull it).
+But available ≠ used; every rollout is **one Pulse PR + five small app PRs**:
+
+1. **Pulse PR:** additive-with-defaults API; regenerate `pulse-index.json` + add the
+   `pulse-meta.json` entry (`index-drift` gates); the `consumer-build` job proves Cookbook
+   compiles; build the other consumers locally before pushing anything breaking.
+2. **App PRs (one per app, normal feature PRs):** swap the app-local implementation for the
+   library one, wire any manifest/dependency bits (splash needs `core-splashscreen` + theme
+   entries; the appearance toggle needs a Settings row + stored pref per app), and
+   **re-record + eyeball that app's Roborazzi baselines** — adopting visuals changes pixels,
+   and a baseline accepted unseen is how the wrapped-money bug shipped (Magpie Tier 4 lesson).
+3. **Spotter goes first for anything extracted *from* Spotter** (celebration, onboarding):
+   zero-visual-diff against its existing baselines proves the extraction before four other
+   apps depend on it.
+4. **Releases ride adoption:** a Pulse push cuts no consumer release; each app's adopting PR
+   touches `android/**` and cuts that app's release naturally. Watch the corollary — any
+   unrelated app release silently picks up whatever Pulse has merged since, so `main` here
+   must always be shippable.
+5. **Hawksnest separately:** token-level changes get hand-mirrored into its
+   `src/theme/tokens.css`; component-level items would need a React port — keep that scope
+   deliberately small (see non-goals).
+
 ## Explicitly not worth it
 
 - A real versioning/publishing story (Maven, version pins) — consumers deliberately float on

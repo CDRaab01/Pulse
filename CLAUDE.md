@@ -12,25 +12,25 @@ about the responsibilities that come with editing a library four apps depend on.
 | Dragonfly (hub) | composite build | Violet |
 | Spotter | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | Blue |
 | Plate | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | **Green** |
-| Magpie | composite build (planned — repo founded 2026-07-04, Android not yet scaffolded) | **Teal** |
-| Hawksnest | CSS port only (`src/theme/tokens.css`) — web can't consume a Compose lib | (dark-only web) |
+| Magpie | composite build `includeBuild("../../Pulse")` (live since the 2026-07-05 build) | **Teal** |
+| Hawksnest | CSS port only (`src/theme/tokens.css`) — web can't consume a Compose lib; dark + light (`:root.light`) since V1 Gate 4 | (CSS port) |
 
 Consequences:
 
-- **A change here ships with the next Cookbook/Dragonfly/Plate release automatically** — their
-  `release.yml` jobs check out this repo as a sibling for the composite build. There is no Pulse
-  version gate in practice (the dependency line says `0.1.0` but the composite build always uses
-  the sibling working tree/branch that CI checks out). Breaking API changes here break those
-  apps' CI immediately; build all three consumers before pushing.
-- **All four consumers (Cookbook/Dragonfly/Plate/Spotter) now take changes automatically** — every
-  app is on the composite build. Build all four before pushing a breaking change here. (Hawksnest is
-  a separate CSS port; not a Compose consumer.)
+- **A change here ships with every consumer's next release automatically** — all five Compose
+  apps' (Cookbook/Dragonfly/Spotter/Plate/Magpie) `release.yml` jobs check out this repo as a
+  sibling for the composite build. There is no Pulse version gate in practice (the dependency
+  line says `0.1.0` but the composite build always uses the sibling working tree/branch that CI
+  checks out). Breaking API changes here break those apps' CI immediately; build all five
+  consumers before pushing. Corollary: a Pulse push alone triggers **no** consumer release —
+  it rides silently until each app's next `android/**` push, which is why additive-with-defaults
+  is law. (Hawksnest is a separate CSS port; not a Compose consumer.)
 - **Components are the superset from Spotter** (the original richer PULSE), reconciled 2026-07-03:
   `StatTile` has a `dense` metric layout (icon/animatedValue/sparkline) alongside the standard tile;
   `PanelCard` takes onClick/channel/raised/contentPadding; `SectionHeader` takes a `trailing` slot;
   `Sparkline` has a filled-line mode via a non-null `strokeWidth`; `TickerNumber` is here now. New
   params are additive with backward-compatible defaults, so the leaner callers stay pixel-identical —
-  keep it that way (verify all four apps' Roborazzi when touching a shared component).
+  keep it that way (verify all five apps' Roborazzi when touching a shared component).
 - **Version alignment is load-bearing:** consumers' AGP/Kotlin/Compose-BOM must match
   `gradle/libs.versions.toml` here (currently AGP 9.1.1 / Kotlin 2.2.10 / BOM 2026.06.01 —
   that file is the source of truth if this line ever drifts again).
