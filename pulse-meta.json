@@ -195,6 +195,18 @@
           "Do not hard-code the selected fill — it comes from the channel's dim tone (Pulse.accent.dim or a passed channelDim)."
         ]
       }
+    },
+    "PulseSegmentedControl": {
+      "role": "action",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "A 2-4 way exclusive choice (the Dark/Light/System appearance switch is built from it). String labels + selectedIndex + onSelect(index); map your enum to labels app-side. Pass a channel to bind the selection to a data domain.",
+        "neverDoExtra": [
+          "Keep it to a small number of segments — for many options use a list of PulseSelectableCard instead.",
+          "The selected fill is the channel dim tone; do not hard-code it."
+        ]
+      }
     }
   }
 }

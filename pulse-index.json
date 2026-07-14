@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 18,
+  "componentCount": 19,
   "components": [
     {
       "name": "ConfettiHost",
@@ -1028,6 +1028,66 @@
           "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
           "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseSegmentedControl",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "SegmentedControl.kt",
+      "role": "action",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "A segmented control — a hairline-bordered pill split into 2–4 choices, the selected one filled with the channel's dim tone and channel-colored text.",
+      "params": [
+        {
+          "name": "options",
+          "type": "List<String>",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "selectedIndex",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onSelect",
+          "type": "(Int) -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channelDim",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "A 2-4 way exclusive choice (the Dark/Light/System appearance switch is built from it). String labels + selectedIndex + onSelect(index); map your enum to labels app-side. Pass a channel to bind the selection to a data domain.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Keep it to a small number of segments — for many options use a list of PulseSelectableCard instead.",
+          "The selected fill is the channel dim tone; do not hard-code it."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }
