@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 14,
+  "componentCount": 18,
   "components": [
     {
       "name": "ConfettiHost",
@@ -126,6 +126,247 @@
           "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
           "Do not stack multiple pressScale modifiers on one element."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulsePageIndicator",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Onboarding.kt",
+      "role": "indicator",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "The page-dot indicator: a row of dots with the active one stretched into a pill (accent-tinted).",
+      "params": [
+        {
+          "name": "count",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "current",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "activeColor",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "inactiveColor",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "The active dot animates its width on page change; drive it from the pager's current page, don't animate it yourself."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "OnboardingPage",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Onboarding.kt",
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "summary": "A standard onboarding page: an optional illustration slot (glyph, image, CelebrationPulse…), a bold title, and a body line — centered, generously padded.",
+      "params": [
+        {
+          "name": "title",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "body",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "illustration",
+          "type": "(@Composable () -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "A standard intro page: optional illustration slot + title + body, centered. Put a glyph, image, or CelebrationPulse in the illustration slot; keep the copy app-side.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "OnboardingScaffold",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Onboarding.kt",
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "The intro-pager shell: pageCount swipeable pages with a PulsePageIndicator, a \"Skip\" text action, and a primary PulseButton that advances (\"Next\") until the last page, where it reads \"Done\" and calls onFinish.",
+      "params": [
+        {
+          "name": "pageCount",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onFinish",
+          "type": "() -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "onSkip",
+          "type": "() -> Unit",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "nextLabel",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "finishLabel",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "skipLabel",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "pagerState",
+          "type": "PagerState",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "page",
+          "type": "@Composable (index: Int) -> Unit",
+          "hasDefault": false,
+          "required": true
+        }
+      ],
+      "agentMeta": {
+        "extend": "The intro-pager shell (pager + PulsePageIndicator + Skip + Next/Done). Supply each page via the page slot (usually an OnboardingPage) and put finish behavior (persist 'seen', navigate) in onFinish.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not put onboarding state/persistence into Pulse — the scaffold is presentation only; the 'has seen onboarding' flag and page content live app-side."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseSelectableCard",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Onboarding.kt",
+      "role": "action",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "A selectable card — the pick-one / pick-many primitive for questionnaire-style onboarding, and any settings/picker surface.",
+      "params": [
+        {
+          "name": "label",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "selected",
+          "type": "Boolean",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onClick",
+          "type": "() -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channelDim",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "trailing",
+          "type": "(@Composable (selected: Boolean) -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "The pick-one/pick-many card. Pass a channel to bind selection to a data domain; override the trailing slot for a custom affordance (radio/checkbox). Selected fills with the channel dim tone.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not hard-code the selected fill — it comes from the channel's dim tone (Pulse.accent.dim or a passed channelDim)."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }

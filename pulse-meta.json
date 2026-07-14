@@ -155,6 +155,46 @@
           "This self-animates on an infinite transition — it is the quiet celebration. Use it for a sustained badge glow, not a one-shot burst (that is ConfettiHost)."
         ]
       }
+    },
+    "PulsePageIndicator": {
+      "role": "indicator",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "neverDoExtra": [
+          "The active dot animates its width on page change; drive it from the pager's current page, don't animate it yourself."
+        ]
+      }
+    },
+    "OnboardingPage": {
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "A standard intro page: optional illustration slot + title + body, centered. Put a glyph, image, or CelebrationPulse in the illustration slot; keep the copy app-side."
+      }
+    },
+    "OnboardingScaffold": {
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "The intro-pager shell (pager + PulsePageIndicator + Skip + Next/Done). Supply each page via the page slot (usually an OnboardingPage) and put finish behavior (persist 'seen', navigate) in onFinish.",
+        "neverDoExtra": [
+          "Do not put onboarding state/persistence into Pulse — the scaffold is presentation only; the 'has seen onboarding' flag and page content live app-side."
+        ]
+      }
+    },
+    "PulseSelectableCard": {
+      "role": "action",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "The pick-one/pick-many card. Pass a channel to bind selection to a data domain; override the trailing slot for a custom affordance (radio/checkbox). Selected fills with the channel dim tone.",
+        "neverDoExtra": [
+          "Do not hard-code the selected fill — it comes from the channel's dim tone (Pulse.accent.dim or a passed channelDim)."
+        ]
+      }
     }
   }
 }
