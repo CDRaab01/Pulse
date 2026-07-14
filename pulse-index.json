@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 19,
+  "componentCount": 22,
   "components": [
     {
       "name": "ConfettiHost",
@@ -90,6 +90,183 @@
           "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
           "This self-animates on an infinite transition — it is the quiet celebration. Use it for a sustained badge glow, not a one-shot burst (that is ConfettiHost)."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "HeatCalendar",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "DataViz.kt",
+      "role": "chart",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "summary": "A contribution-graph heat calendar: intensities is one value per day in chronological order, laid out in columns of 7 (a week per column).",
+      "params": [
+        {
+          "name": "intensities",
+          "type": "List<Float>",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "cellSize",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "cellGap",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "max",
+          "type": "Float?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Pass intensities as one value per day in chronological order; it lays them out in columns of 7. Cell alpha scales over max (series max when null). Bind meaning with a channel.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "This is a pure Canvas draw with no self-animation. Do not push date/label semantics in — it only knows a chronological list of magnitudes."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseBarChart",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "DataViz.kt",
+      "role": "chart",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "A vertical bar chart with x-axis labels — magnitudes over a small set of periods (a training week, a spend-by-category row).",
+      "params": [
+        {
+          "name": "values",
+          "type": "List<Float>",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "labels",
+          "type": "List<String>",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "barHeight",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "emphasizeLast",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Vertical bars for a small set of periods, with x labels. Bars grow in on the DATA motion the first time they compose (and re-grow when values change). The last bar is emphasized; pass emphasizeLast=false to level them.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "For a tiny inline series with no labels use Sparkline(asBars=true) instead — this is the full labelled version."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseLineChart",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "DataViz.kt",
+      "role": "chart",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "summary": "A line chart with an area fill and a draw-in reveal (the line wipes in left→right on the DATA spec).",
+      "params": [
+        {
+          "name": "values",
+          "type": "List<Float>",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "lineHeight",
+          "type": "Dp",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "normalizeMinMax",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "fill",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "A trend line with area fill that wipes in left-to-right on the DATA motion. Min-max normalized by default (fills the height); pass normalizeMinMax=false for a zero baseline.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "For a tiny inline trend use Sparkline (line mode) instead — this is the full-height version with the draw-in reveal."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }

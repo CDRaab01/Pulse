@@ -207,6 +207,39 @@
           "The selected fill is the channel dim tone; do not hard-code it."
         ]
       }
+    },
+    "HeatCalendar": {
+      "role": "chart",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "Pass intensities as one value per day in chronological order; it lays them out in columns of 7. Cell alpha scales over max (series max when null). Bind meaning with a channel.",
+        "neverDoExtra": [
+          "This is a pure Canvas draw with no self-animation. Do not push date/label semantics in — it only knows a chronological list of magnitudes."
+        ]
+      }
+    },
+    "PulseBarChart": {
+      "role": "chart",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "Vertical bars for a small set of periods, with x labels. Bars grow in on the DATA motion the first time they compose (and re-grow when values change). The last bar is emphasized; pass emphasizeLast=false to level them.",
+        "neverDoExtra": [
+          "For a tiny inline series with no labels use Sparkline(asBars=true) instead — this is the full labelled version."
+        ]
+      }
+    },
+    "PulseLineChart": {
+      "role": "chart",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "A trend line with area fill that wipes in left-to-right on the DATA motion. Min-max normalized by default (fills the height); pass normalizeMinMax=false for a zero baseline.",
+        "neverDoExtra": [
+          "For a tiny inline trend use Sparkline (line mode) instead — this is the full-height version with the draw-in reveal."
+        ]
+      }
     }
   }
 }
