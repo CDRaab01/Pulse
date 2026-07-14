@@ -12,7 +12,9 @@ repo's backlog:
    structure, never meaning**: apps decide *what* to celebrate, Pulse owns *how it moves* (wire
    into `PulseMotion`). Add an onboarding scaffold (pager + page primitives) so Plate, Cookbook,
    Magpie, and the hub don't each reinvent Spotter's `ui/onboarding/`. New params additive with
-   backward-compatible defaults, per the house rule.
+   backward-compatible defaults, per the house rule. *Added 2026-07-14:* **Glance widget theming
+   primitives** too (colors/type for RemoteViews-land, where Compose theming doesn't reach) — the
+   host Tier W4 widget family only reads as one system if the tokens come from here.
    *Done when:* Spotter consumes the library versions with zero visual diff (its Roborazzi
    baselines), and one non-Spotter app ships a celebration moment through them.
 2. **Component-level screenshot tests in this repo.** Today `:pulse-ui:assemble` "proves nearly
