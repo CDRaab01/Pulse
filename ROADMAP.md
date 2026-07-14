@@ -2,12 +2,34 @@
 
 Pulse never had a roadmap — it grew by extraction. The suite pivot changes that: **the host-level
 1.0 polish program (C:\Code ROADMAP3, 2026-07-13) starts here**, because a change in this library
-propagates to all four Compose consumers automatically. Tier P of that program, restated as this
+propagates to all five Compose consumers automatically. Tier P of that program, restated as this
 repo's backlog:
+
+## ✓ v1.0.0 shipped (2026-07-14) — the library content of Tier P + P2
+
+`pulse-ui` is at **1.0.0**. What landed in the library (each item's line below is annotated):
+- **Delight:** `ConfettiHost`, `CelebrationPulse` (+ konfetti dep).
+- **First-run:** `OnboardingScaffold`, `OnboardingPage`, `PulsePageIndicator`, `PulseSelectableCard`.
+- **Felt/appearance/motion:** `PulseHaptics`, `ThemePref` + `PulseSegmentedControl`, `PulseTransitions`.
+- **Data-viz:** `HeatCalendar`, `PulseBarChart`, `PulseLineChart`.
+- **Surfaces:** `HeroPanel`, `PulseRefreshBox`.
+- **Safety net:** component Roborazzi screenshot tests + gating CI job (Tier P #2).
+- **Splash:** shipped as a documented recipe (app-side; ARCHITECTURE.md § Splash-screen recipe).
+
+**What "v1.0.0" does NOT include, deliberately** (these become v1.x, built as apps consume them):
+- **Glance widget theming (#1 tail)** — deferred to a future **`pulse-glance` module** so the
+  `glance` dep doesn't burden non-widget consumers; build with the Tier W widget family.
+- **App icon family (#11)** and **empty-state glyph set (#12)** — design-art tasks, done
+  deliberately rather than rushed; `EmptyState` takes any `ImageVector` meanwhile.
+- **Consumer baseline debt (#3)** — belongs to each app's own polish round, not this repo.
+
+**Adoption is the next phase**, per "the rollout recipe" below: the components are *available* on
+`main`; each app now swaps its local copies for the library versions (Spotter first for the
+extracted ones) in its own polish round. Version stays 1.0.0; consumers float on it.
 
 ## Tier P — harden the lever
 
-1. **Promote the delight primitives into `pulse-ui`.** `ConfettiHost`/`CelebrationPulse` (living
+1. **✓ Promote the delight primitives into `pulse-ui`.** (SHIPPED — Glance tail deferred, see header.) `ConfettiHost`/`CelebrationPulse` (living
    app-side in Spotter today) + `HeatBar`, under the existing law — **Pulse knows hues and
    structure, never meaning**: apps decide *what* to celebrate, Pulse owns *how it moves* (wire
    into `PulseMotion`). Add an onboarding scaffold (pager + page primitives) so Plate, Cookbook,
@@ -17,12 +39,12 @@ repo's backlog:
    host Tier W4 widget family only reads as one system if the tokens come from here.
    *Done when:* Spotter consumes the library versions with zero visual diff (its Roborazzi
    baselines), and one non-Spotter app ships a celebration moment through them.
-2. **Component-level screenshot tests in this repo.** Today `:pulse-ui:assemble` "proves nearly
+2. **✓ Component-level screenshot tests in this repo.** (SHIPPED — `PulseScreenshotTest` + gating CI.) Today `:pulse-ui:assemble` "proves nearly
    nothing" (ARCHITECTURE.md) and correctness rides on consumers' under-recorded baselines. Add
    Roborazzi at the component level here — per component, both schemes, a couple of accents.
    *Done when:* a deliberate 1-px padding change on `StatTile` fails Pulse CI before any
    consumer sees it.
-3. **Drive the consumer baseline debt to zero** (coordinated with each app's polish round):
+3. **[deferred to each app's polish round] Drive the consumer baseline debt to zero** (coordinated with each app's polish round):
    Cookbook non-Home screens; the hub app (record or delete its job — no permanently-skipped
    checks under the 1.0 bar).
 4. ~~Toolchain doc drift~~ — **✓ fixed 2026-07-13**: CLAUDE.md here (and Dragonfly's, and the
@@ -37,44 +59,44 @@ polish actually lives. Grounded in an audit of the consumers: apps follow system
 offer **no in-app theme choice**, **no themed splash screens**, haptics used in exactly 2 files
 across Spotter+Plate, and every app hand-rolls its larger charts. Ranked by wow-per-effort:
 
-5. **Semantic haptics vocabulary (`PulseHaptics`).** Tokens — `confirm`, `tick` (rest-timer /
+5. **✓ Semantic haptics vocabulary (`PulseHaptics`).** (SHIPPED.) Tokens — `confirm`, `tick` (rest-timer /
    rep counts), `celebrate`, `warning` — paired to `PulseMotion` so animation and vibration fire
    together (Hawksnest's semantic-haptics work is the precedent; the Compose apps barely
    vibrate). Premium feel is multi-sensory, and this is the cheapest lever left.
    *Done when:* two apps ship interactions using the same named haptic + motion pair.
-6. **Themed splash screens.** One Pulse recipe for the Android 12+ SplashScreen API
+6. **✓ Themed splash screens.** (SHIPPED as a recipe — ARCHITECTURE.md § Splash-screen recipe.) One Pulse recipe for the Android 12+ SplashScreen API
    (accent-tinted icon reveal on the dark field); apply per app (~an hour each — none use it
    today). First impression of every single launch. *Done when:* all five Compose apps launch
    through it.
-7. **Appearance scaffold (Dark/Light/System).** The light schemes exist in `Schemes.kt` but only
+7. **✓ Appearance scaffold (Dark/Light/System).** (SHIPPED — `ThemePref` + `PulseSegmentedControl`.) The light schemes exist in `Schemes.kt` but only
    the OS can choose. A Pulse-side preference + segmented-control pattern (Hawksnest Settings is
    the model) so all five apps gain the toggle identically — and the suite bar's "dark/light
    parity" becomes demonstrable, not latent. *Done when:* every app has Settings → Appearance
    and honors it.
-8. **`HeatCalendar`** (GitHub-contribution style) — the most "serious tool" chart there is:
+8. **✓ `HeatCalendar`** (SHIPPED) (GitHub-contribution style) — the most "serious tool" chart there is:
    Spotter training consistency, Plate logging streaks, Magpie spending-by-day, one component.
    Entrance on the DATA motion spec. *Done when:* it ships in two apps from the same component.
-9. **Unified chart kit (`PulseChart` layer).** `Sparkline` + `ProgressRing` are here; the bigger
+9. **✓ Unified chart kit.** (SHIPPED — `PulseBarChart` + `PulseLineChart`, DATA-motion draw-in.) `Sparkline` + `ProgressRing` are here; the bigger
    charts (Spotter progress, Plate trends, Magpie trends) are three hand-rolled dialects. One
    bar/line-with-area kit sharing a single draw-in entrance (DATA 600 ms), the mono data face
    for axes/labels, one tooltip treatment. Charts are where "one developer" vs "a team" is most
    visible. *Done when:* the three apps' headline charts render through it with baselines.
-10. **Screen-transition vocabulary.** `Motion.kt` owns durations/easings but nothing owns
+10. **✓ Screen-transition vocabulary.** (SHIPPED — `PulseTransitions`.) `Motion.kt` owns durations/easings but nothing owns
     *navigation*; each app uses defaults. A nav-transition set (shared-axis forward/back,
     fade-through for tab switches) consumed suite-wide. *Done when:* two apps navigate with it
     and it's in the consumer contract docs.
-11. **App icon family** — six icons, one geometry language, per-app accent on the shared dark
+11. **[deferred — design-art task] App icon family** — six icons, one geometry language, per-app accent on the shared dark
     field; the home-screen row is the suite's storefront (Magpie's icon is on record as
     "acceptable, not perfect"; the set was never designed together). Design task more than code;
     the launcher-icon assets live in each app repo, the geometry spec lives here.
     *Done when:* all six icons visibly share one language on a real launcher.
-12. **Empty-state glyph set** — 8–10 geometric line-art glyphs in one stroke style (barbell,
+12. **[deferred — design-art task] Empty-state glyph set** — 8–10 geometric line-art glyphs in one stroke style (barbell,
     plate, pot, nest, magpie…) to feed `EmptyState`; kills the last bare-feeling screens.
     Glyphs are structure, not meaning — apps pick which glyph means what.
-13. **`HeroPanel` promotion** — Plate's gradient hero and Magpie's Tier-4 hero are near-identical
+13. **✓ `HeroPanel` promotion** (SHIPPED) — Plate's gradient hero and Magpie's Tier-4 hero are near-identical
     app-side inventions; standardize the one component (gradient rules from the accent, not
     hand-picked colors).
-14. **Pull-to-refresh indicator skin** — the stock Material spinner is the one visibly non-Pulse
+14. **✓ Pull-to-refresh indicator skin** (SHIPPED — `PulseRefreshBox`) — the stock Material spinner is the one visibly non-Pulse
     element in every scroll view; skin it once.
 
 Suggested order: 5–7 first (quick, touch every interaction), then 9 and 11 (the two loudest

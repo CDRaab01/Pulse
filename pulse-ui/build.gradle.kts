@@ -7,7 +7,7 @@ plugins {
 // (includeBuild from a sibling checkout) substitute these automatically; a published Maven
 // artifact can replace that later without consumers changing their dependency line.
 group = "design.pulse"
-version = "0.1.0"
+version = "1.0.0"
 
 android {
     namespace = "design.pulse.ui"

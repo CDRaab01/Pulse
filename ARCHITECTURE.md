@@ -5,10 +5,11 @@ How this repo is organized and the responsibilities that come with it. Suite-lev
 contents: [README.md](README.md).
 
 Pulse is the smallest repo in the suite and the one with the widest blast radius: one Android
-library module (`pulse-ui/` → `design.pulse:pulse-ui`), no app, **no tests of its own** — and
-four apps (Spotter, Plate, Cookbook, Dragonfly) consume it live via Gradle composite builds,
-plus a fifth (Magpie) reserved to join once its Android module is scaffolded. It is never
-deployed; it ships inside its consumers' releases.
+library module (`pulse-ui/` → `design.pulse:pulse-ui`, **v1.0.0**), no app, and **five** apps
+(Spotter, Plate, Cookbook, Dragonfly, Magpie) consume it live via Gradle composite builds. It is
+never deployed; it ships inside its consumers' releases. As of v1.0.0 it carries its own
+**component screenshot tests** (Roborazzi — see `## Screenshot tests`) so a shared-component
+regression is caught here rather than in four consumers' baselines.
 
 ## Consumption model (why every change here is a four-app change)
 
@@ -19,12 +20,13 @@ Consequences:
 
 - A change on Pulse `main` is picked up by the next CI/release run of every consumer,
   automatically.
-- **Validation lives in the consumers, not here.** `pulse-ui` has no unit tests; correctness is
-  pinned by the consumers' compiles and their Roborazzi screenshot baselines. Before pushing
-  anything, build at least one consumer app (`assembleDebug` in Cookbook is the convention) —
-  `:pulse-ui:assemble` alone proves nearly nothing (it skips `checkDebugAarMetadata`; a
-  dependency bump that passed here once broke all four consumers' `main` at once — see host
-  ROADMAP.md T2 #2).
+- **Validation is layered.** As of v1.0.0 `pulse-ui` has its own component screenshot tests
+  (`## Screenshot tests`), so a visual regression in a shared component fails Pulse CI directly.
+  That does **not** replace the consumer gate: `:pulse-ui:assemble` still skips
+  `checkDebugAarMetadata`, so CI also builds a real consumer (Cookbook `:app:assembleDebug`)
+  against the PR's Pulse to catch API/binary breakage (a dependency bump that passed here once
+  broke all four consumers' `main` at once — host ROADMAP2 T1 #8). Before pushing anything,
+  build at least one consumer locally too.
 - **Toolchain lockstep**: `gradle/libs.versions.toml` (currently AGP 9.1.1 / Kotlin 2.2.10 /
   Compose BOM 2026.06.01) is the suite's reference; consumers must match it exactly or the
   composite build breaks binary compatibility. AGP/Kotlin/Compose/KSP bumps are a coordinated
@@ -43,20 +45,34 @@ Consequences:
 | `Palette.kt`, `Schemes.kt` | The shared hue families + M3 color schemes (dark-first OLED; contrast-safe light variants) |
 | `Type.kt`, `DataType.kt` | UI type scale (Space Grotesk / Inter) + the mono data scale (JetBrains Mono for every numeral). **Fonts are static per-weight instances — never variable fonts** (real-device rendering bug) |
 | `Motion.kt`, `Shape.kt`, `Dimens.kt`, `Structure.kt` | Motion tokens (Fast/Standard/Emphasized/Data + easings), 8/12/16dp shapes, spacing, panel/hairline structural tokens (depth = stroke + tone, not shadows) |
+| `Haptics.kt` (v1.0.0) | `PulseHaptics` semantic vocabulary (tick/select/confirm/celebrate/warning/threshold) — the felt layer, paired to Motion; `rememberPulseHaptics()` |
+| `Appearance.kt` (v1.0.0) | `ThemePref` (System/Light/Dark) + `resolveDarkTheme()` — the user-facing switch over the light schemes that already existed |
+| `Transitions.kt` (v1.0.0) | `PulseTransitions` — the screen-transition vocabulary (shared-axis X, fade-through) for NavHost enter/exit, timed on Motion |
 
 ### `components/` — the kit
 
-`PanelCard`, `PulseButton`, `StatTile` (incl. `dense` metric mode), `SectionHeader` (trailing
-slot), `DataText`/`TickerNumber`, `ProgressRing`, `Sparkline` (line + filled modes), `Caption`,
-`ChannelDot`, `EmptyState`, `Modifier.pressScale`. These are the **Spotter-superset** versions
-(reconciled 2026-07-03): richer parameters with defaults chosen so leaner callers render
+The **0.1 baseline** (Spotter-superset, reconciled 2026-07-03): `PanelCard`, `PulseButton`,
+`StatTile` (incl. `dense` metric mode), `SectionHeader` (trailing slot), `DataText`/`TickerNumber`,
+`ProgressRing`, `Sparkline` (line + filled modes), `Caption`, `ChannelDot`, `EmptyState`,
+`Modifier.pressScale` — richer parameters with defaults chosen so leaner callers render
 pixel-identically.
 
+The **v1.0.0 additions** (the 1.0 polish program, host ROADMAP3 Tier P/P2):
+- *Delight* — `ConfettiHost`, `CelebrationPulse` (`Celebration.kt`; brings in the konfetti dep).
+- *First-run* — `OnboardingScaffold`, `OnboardingPage`, `PulsePageIndicator`, `PulseSelectableCard`
+  (`Onboarding.kt`).
+- *Data-viz* — `HeatCalendar`, `PulseBarChart`, `PulseLineChart` (`DataViz.kt`; one draw-in
+  entrance on the DATA motion).
+- *Surfaces/controls* — `HeroPanel` (`HeroPanel.kt`), `PulseSegmentedControl` (`SegmentedControl.kt`),
+  `PulseRefreshBox` (`RefreshBox.kt`).
+
 The dividing line: **generic tokens/components live here; channel *semantics* (which hue means
-what) and app-specific components (Spotter's `HeatBar`/`ConfettiHost`, Plate's hero gradient,
-etc.) stay app-side** in each `ui/theme/<App>Theme.kt`. If a component exists in two apps,
-promote it here as a superset; never let in-tree copies reappear (that drift is what this repo
-was created to kill).
+what) stay app-side** in each `ui/theme/<App>Theme.kt`. If a component exists in two apps, promote
+it here as a superset (the v1.0.0 batch did exactly this with Spotter's confetti/celebration and
+onboarding); never let in-tree copies reappear (that drift is what this repo was created to kill).
+Still deliberately app-side: an app's *own* meaning-bearing components. **Deferred to a future
+`pulse-glance` module** (not `pulse-ui`): Glance widget theming primitives — adding the `glance`
+dependency to `pulse-ui` would burden every consumer; build it when the Tier W widget family lands.
 
 ## Machine-readable API surface (`pulse-index.json`)
 
@@ -82,6 +98,37 @@ Contract, enforced by CI's `index-drift` job (`java tools/PulseIndex.java verify
   is byte-identical and consumers stay pixel-identical. A KSP processor was rejected: AGP 9's built-in
   Kotlin (no `kotlin.android` plugin) makes KSP an unproven spike, and the drift-check gives the same
   "can't lie" guarantee without it. Publishing it *inside* the AAR (assets) is a possible later step.
+
+## Screenshot tests (`pulse-ui/src/test/`, baselines in `pulse-ui/screenshots/`)
+
+Component-level Roborazzi over Robolectric **native graphics** — renders the kit to PNGs on the
+JVM with no device/emulator, so a visual change in a shared component is caught in Pulse CI
+directly. `PulseScreenshotTest` captures three scenes (surfaces, data-viz, controls) in dark +
+light plus a green-accent variant (7 baselines), each wrapped in `PulseTheme(darkTheme, accent)`.
+
+- **Run / record / verify:** `./gradlew :pulse-ui:testDebugUnitTest` (system-property-driven, no
+  Gradle plugin). Record baselines with `-Proborazzi.test.record=true`; CI gates with
+  `-Proborazzi.test.verify=true` (the `screenshots` job). `changeThreshold` 0.03 absorbs sub-pixel
+  AA noise; native-graphics rendering is platform-stable, so baselines recorded on Windows verify
+  on the Linux runner.
+- **`ui-test-manifest`** is a `debugImplementation` — a library module has no launcher activity, so
+  `createComposeRule()` needs it to resolve a `ComponentActivity`.
+- **Eyeball recorded baselines before committing.** An accepted-but-unlooked-at baseline is exactly
+  how the Magpie wrapped-money bug shipped. Infinite-transition components (`ConfettiHost`,
+  `CelebrationPulse`) are not captured — they never idle; finite draw-ins settle to their final
+  frame before capture.
+
+## Splash-screen recipe (app-side; Pulse supplies the palette, not code)
+
+The themed splash is a per-app `themes.xml` + `androidx.core:core-splashscreen` concern, not a
+Compose surface, so Pulse can't ship it as a component — it's a recipe every app follows so the
+launch reads as one family:
+
+1. Add `androidx.core:core-splashscreen`; give the launch theme `parent="Theme.SplashScreen"`.
+2. `windowSplashScreenBackground` = the app's dark ink (`PulseInk`, `#0B0D10`).
+3. `windowSplashScreenAnimatedIcon` = the app's monochrome logo glyph, tinted with the app's lead
+   accent (`PulseAccent` base — Blue/Green/Amber/Violet/Teal).
+4. `postSplashScreenTheme` = the normal app theme; call `installSplashScreen()` before `setContent`.
 
 ## How to change Pulse safely
 

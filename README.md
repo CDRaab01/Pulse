@@ -16,9 +16,13 @@ Cookbook became the third copy.
   (Space Grotesk / Inter / JetBrains Mono as **static per-weight font instances** — never variable
   fonts, some devices render the lightest master), data-display type scale, motion tokens, shapes,
   spacing.
-- **`design.pulse.ui.components`** — `PanelCard`, `PulseButton`, `DataText`, `Caption`,
+- **`design.pulse.ui.components`** — the 0.1 kit: `PanelCard`, `PulseButton`, `DataText`, `Caption`,
   `SectionHeader`, `StatTile`, `Sparkline`, `ChannelDot`, `EmptyState`, `ProgressRing`,
-  `Modifier.pressScale`.
+  `Modifier.pressScale`. **v1.0.0 added** (the suite 1.0 polish program): *delight* — `ConfettiHost`,
+  `CelebrationPulse`; *first-run* — `OnboardingScaffold`, `OnboardingPage`, `PulsePageIndicator`,
+  `PulseSelectableCard`; *data-viz* — `HeatCalendar`, `PulseBarChart`, `PulseLineChart`; *surfaces/
+  controls* — `HeroPanel`, `PulseSegmentedControl`, `PulseRefreshBox`. Theme-level v1 additions:
+  `PulseHaptics`, `ThemePref` (Dark/Light/System), `PulseTransitions`.
 
 ## What stays in each app
 
@@ -41,7 +45,7 @@ Composite build from a sibling checkout (all repos under one parent dir):
 includeBuild("../../Pulse")
 
 // app/build.gradle.kts
-implementation("design.pulse:pulse-ui:0.1.0")
+implementation("design.pulse:pulse-ui:1.0.0")
 ```
 
 Keep AGP/Kotlin/Compose versions aligned with `gradle/libs.versions.toml` here — composite builds

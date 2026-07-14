@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generator": "tools/PulseIndex.java",
-  "pulseVersion": "0.1.0",
+  "pulseVersion": "1.0.0",
   "accents": [
     "Blue",
     "Amber",
