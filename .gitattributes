@@ -1,0 +1,4 @@
+# The generated component index is byte-compared by tools/PulseIndex.java (verify). Pin it to LF so
+# a Windows checkout (core.autocrlf=true) doesn't rewrite it to CRLF and make local verify disagree
+# with CI. The generator always writes LF.
+pulse-index.json text eol=lf

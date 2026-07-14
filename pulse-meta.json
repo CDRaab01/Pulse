@@ -132,6 +132,29 @@
           "Do not stack multiple pressScale modifiers on one element."
         ]
       }
+    },
+    "ConfettiHost": {
+      "role": "celebration",
+      "since": "1.0.0",
+      "perfTier": "conditional",
+      "agentMeta": {
+        "extend": "Add defaulted params only. Pass a custom colors list to tint a burst to one data domain; otherwise it uses the four brand hues (PulseConfettiColors).",
+        "neverDoExtra": [
+          "'conditional' perfTier: renders nothing until play=true, then emits one 200ms burst. Do not leave play=true (it re-emits on recomposition) — drive it from a one-shot event and reset it.",
+          "Do not fire on routine actions. Confetti is a signal reserved for genuine milestones (a PR, a goal hit, onboarding complete), not every save."
+        ]
+      }
+    },
+    "CelebrationPulse": {
+      "role": "celebration",
+      "since": "1.0.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "Wrap the thing being celebrated (a badge, a checkmark) as content. Pass a channel Color to tint the glow to a data domain; it defaults to the app's lead accent (Pulse.accent).",
+        "neverDoExtra": [
+          "This self-animates on an infinite transition — it is the quiet celebration. Use it for a sustained badge glow, not a one-shot burst (that is ConfettiHost)."
+        ]
+      }
     }
   }
 }

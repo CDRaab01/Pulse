@@ -32,4 +32,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    // The celebration burst (ConfettiHost). Proven in Spotter; brought into Pulse so delight-motion
+    // is standardized, not re-invented per app. `implementation`, not `api`: consumers call
+    // ConfettiHost, never konfetti types directly, so konfetti stays off their compile classpath.
+    implementation(libs.konfetti.compose)
 }

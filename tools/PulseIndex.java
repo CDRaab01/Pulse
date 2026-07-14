@@ -22,8 +22,6 @@ public class PulseIndex {
 
     static final String COMP_DIR = "pulse-ui/src/main/java/design/pulse/ui/components";
     static final String THEME_DIR = "pulse-ui/src/main/java/design/pulse/ui/theme";
-    static final String[] COMPONENT_FILES =
-            { "PulseComponents.kt", "PulseButton.kt", "ProgressRing.kt", "Modifiers.kt" };
     static final String META_FILE = "pulse-meta.json";
     static final String OUT_FILE = "pulse-index.json";
     static final String COMPONENT_PKG = "design.pulse.ui.components";
@@ -43,7 +41,11 @@ public class PulseIndex {
                 for (String p : built.problems) System.err.println("  - " + p);
             }
             Path out = Paths.get(root, OUT_FILE);
-            String current = Files.exists(out) ? new String(Files.readAllBytes(out)) : "";
+            // Read as UTF-8 explicitly: the index carries em-dashes, and the JVM default charset is
+            // not UTF-8 on Java 17/Windows — decoding with it made verify falsely report "stale"
+            // locally while CI (UTF-8 default on Linux) stayed green.
+            String current = Files.exists(out)
+                    ? new String(Files.readAllBytes(out), java.nio.charset.StandardCharsets.UTF_8) : "";
             if (!current.trim().equals(json.trim())) {
                 ok = false;
                 System.err.println("pulse-index.json is stale. Regenerate and commit:");
@@ -83,9 +85,19 @@ public class PulseIndex {
         String pulseVersion = parseVersion(readFile(Paths.get(root, "pulse-ui/build.gradle.kts")));
         List<String> accents = parseAccents(readFile(Paths.get(root, THEME_DIR, "Structure.kt")));
 
+        // Every *.kt in the components dir is scanned (sorted for deterministic output) — adding a
+        // new component file needs no change here; just give each public component a pulse-meta entry.
+        List<String> componentFiles = new ArrayList<>();
+        try (java.util.stream.Stream<Path> s = Files.list(Paths.get(root, COMP_DIR))) {
+            s.filter(p -> p.getFileName().toString().endsWith(".kt"))
+             .map(p -> p.getFileName().toString())
+             .sorted()
+             .forEach(componentFiles::add);
+        }
+
         List<Map<String, Object>> components = new ArrayList<>();
         Set<String> seen = new LinkedHashSet<>();
-        for (String file : COMPONENT_FILES) {
+        for (String file : componentFiles) {
             String src = readFile(Paths.get(root, COMP_DIR, file));
             for (Decl d : parseDecls(src)) {
                 seen.add(d.name);

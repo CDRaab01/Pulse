@@ -7,6 +7,10 @@ agp = "9.1.1"
 kotlin = "2.2.10"
 coreKtx = "1.19.0"
 composeBom = "2026.06.01"
+# konfetti: the celebration burst. Pinned to the version already proven in Spotter (2.0.5) so its
+# adoption is a zero-visual-diff swap. This is the one third-party runtime dependency Pulse carries —
+# delight-motion is a first-class Pulse concern (see Structure.kt energyGradient), not app-local.
+konfetti = "2.0.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -15,6 +19,7 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+konfetti-compose = { group = "nl.dionsegijn", name = "konfetti-compose", version.ref = "konfetti" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
