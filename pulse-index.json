@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 24,
+  "componentCount": 26,
   "components": [
     {
       "name": "ConfettiHost",
@@ -1372,6 +1372,99 @@
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
           "Keep it to a small number of segments — for many options use a list of PulseSelectableCard instead.",
           "The selected fill is the channel dim tone; do not hard-code it."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "ProfileHeader",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Settings.kt",
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "summary": "The account header: an accent-tinted avatar with the user's initial, their name, and email — on a PanelCard.",
+      "params": [
+        {
+          "name": "name",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "channelDim",
+          "type": "Color",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "The account header for a Settings screen: accent avatar-initial + name + email on a PanelCard. Pass name/email from your /me. Use across all apps so Settings reads the same.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not rebuild the account row with a Material Card — that renders muddy grey on OLED; this is a Pulse PanelCard so dark mode is correct."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "SettingsSection",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Settings.kt",
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "summary": "A titled settings group: a PanelCard with a channel-ticked SectionHeader over its content.",
+      "params": [
+        {
+          "name": "title",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "content",
+          "type": "@Composable () -> Unit",
+          "hasDefault": false,
+          "required": true
+        }
+      ],
+      "agentMeta": {
+        "extend": "A titled settings group (PanelCard + SectionHeader + your content). Use it for every group in a Settings screen so panels are consistent and dark-correct.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }

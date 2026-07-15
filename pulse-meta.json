@@ -166,6 +166,25 @@
         ]
       }
     },
+    "ProfileHeader": {
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "The account header for a Settings screen: accent avatar-initial + name + email on a PanelCard. Pass name/email from your /me. Use across all apps so Settings reads the same.",
+        "neverDoExtra": [
+          "Do not rebuild the account row with a Material Card — that renders muddy grey on OLED; this is a Pulse PanelCard so dark mode is correct."
+        ]
+      }
+    },
+    "SettingsSection": {
+      "role": "surface",
+      "since": "1.0.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "A titled settings group (PanelCard + SectionHeader + your content). Use it for every group in a Settings screen so panels are consistent and dark-correct."
+      }
+    },
     "OnboardingPage": {
       "role": "surface",
       "since": "1.0.0",
