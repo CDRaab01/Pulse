@@ -29,7 +29,9 @@ import design.pulse.ui.components.PulseBarChart
 import design.pulse.ui.components.PulseButton
 import design.pulse.ui.components.PulseLineChart
 import design.pulse.ui.components.PulsePageIndicator
+import design.pulse.ui.components.ProfileHeader
 import design.pulse.ui.components.PulseSegmentedControl
+import design.pulse.ui.components.SettingsSection
 import design.pulse.ui.components.PulseSelectableCard
 import design.pulse.ui.components.SectionHeader
 import design.pulse.ui.components.StatTile
@@ -129,6 +131,21 @@ class PulseScreenshotTest {
         EmptyState(icon = plusGlyph, title = "Nothing here yet", subtitle = "Log your first entry to get started.")
     }
 
+    @Composable
+    private fun SettingsScene() {
+        ProfileHeader(name = "Chris Raab", email = "chris@dragonflymedia.org")
+        SettingsSection("Appearance") {
+            PulseSegmentedControl(
+                options = listOf("System", "Light", "Dark"),
+                selectedIndex = 0,
+                onSelect = {},
+            )
+        }
+        SettingsSection("Account") {
+            Text("chris@dragonflymedia.org", style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+
     private fun heatSample(): List<Float> = List(35) { i -> ((i * 7 + 3) % 5).toFloat() }
 
     // A dependency-free sample glyph (a plus) so the test needn't pull in material-icons; EmptyState
@@ -155,4 +172,7 @@ class PulseScreenshotTest {
 
     @Test fun controls_dark() = capture("controls_dark", true, PulseAccent.Blue) { ControlsScene() }
     @Test fun controls_light() = capture("controls_light", false, PulseAccent.Blue) { ControlsScene() }
+
+    @Test fun settings_dark() = capture("settings_dark", true, PulseAccent.Green) { SettingsScene() }
+    @Test fun settings_light() = capture("settings_light", false, PulseAccent.Green) { SettingsScene() }
 }
