@@ -2,10 +2,12 @@ package design.pulse.ui
 
 import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +24,7 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import design.pulse.ui.components.Caption
 import design.pulse.ui.components.EmptyState
+import design.pulse.ui.components.ErrorState
 import design.pulse.ui.components.HeatCalendar
 import design.pulse.ui.components.HeroPanel
 import design.pulse.ui.components.PanelCard
@@ -132,6 +135,22 @@ class PulseScreenshotTest {
     }
 
     @Composable
+    private fun StatesScene() {
+        // Each full-surface state fills its own bounded box so both render (they're fillMaxSize inside).
+        Box(Modifier.fillMaxWidth().height(240.dp)) {
+            EmptyState(icon = plusGlyph, title = "Nothing here yet", subtitle = "Log your first entry to get started.")
+        }
+        Box(Modifier.fillMaxWidth().height(280.dp)) {
+            ErrorState(
+                icon = plusGlyph,
+                title = "Couldn't load",
+                detail = "Check your connection and try again.",
+                onRetry = {},
+            )
+        }
+    }
+
+    @Composable
     private fun SettingsScene() {
         ProfileHeader(name = "Chris Raab", email = "chris@dragonflymedia.org")
         SettingsSection("Appearance") {
@@ -175,4 +194,7 @@ class PulseScreenshotTest {
 
     @Test fun settings_dark() = capture("settings_dark", true, PulseAccent.Green) { SettingsScene() }
     @Test fun settings_light() = capture("settings_light", false, PulseAccent.Green) { SettingsScene() }
+
+    @Test fun states_dark() = capture("states_dark", true, PulseAccent.Blue) { StatesScene() }
+    @Test fun states_light() = capture("states_light", false, PulseAccent.Blue) { StatesScene() }
 }

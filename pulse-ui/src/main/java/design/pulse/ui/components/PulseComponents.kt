@@ -416,3 +416,59 @@ fun EmptyState(
         }
     }
 }
+
+/**
+ * Failed-load state: an error-tinted icon in a circle, a title, an optional [detail] line, and an
+ * optional Retry action. The sibling of [EmptyState] for the "we couldn't fetch this" case — so an
+ * app never falls back to bare red text for a whole surface that failed to load. Reserve this for a
+ * failed *load* (the surface has no content to show); an inline action failure (a save that errored
+ * next to its button) stays inline colored text, not a full-surface state.
+ */
+@Composable
+fun ErrorState(
+    icon: ImageVector,
+    title: String,
+    modifier: Modifier = Modifier,
+    detail: String? = null,
+    onRetry: (() -> Unit)? = null,
+    retryLabel: String = "Try again",
+) {
+    Column(
+        modifier = modifier.fillMaxSize().padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(88.dp)
+                .background(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.6f), CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(40.dp),
+            )
+        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+        if (detail != null) {
+            Text(
+                text = detail,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 8.dp),
+            )
+        }
+        if (onRetry != null) {
+            Spacer(Modifier.height(20.dp))
+            PulseButton(text = retryLabel, onClick = onRetry, tonal = true, compact = true)
+        }
+    }
+}
