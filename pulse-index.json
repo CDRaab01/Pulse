@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 26,
+  "componentCount": 27,
   "components": [
     {
       "name": "ConfettiHost",
@@ -1242,6 +1242,64 @@
         {
           "name": "subtitle",
           "type": "String?",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "ErrorState",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "PulseComponents.kt",
+      "role": "error-state",
+      "since": "1.0.1",
+      "perfTier": "cheap",
+      "summary": "Failed-load state: an error-tinted icon in a circle, a title, an optional detail line, and an optional Retry action.",
+      "params": [
+        {
+          "name": "icon",
+          "type": "ImageVector",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "detail",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "onRetry",
+          "type": "(() -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "retryLabel",
+          "type": "String",
           "hasDefault": true,
           "required": false
         }

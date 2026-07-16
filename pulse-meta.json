@@ -101,6 +101,11 @@
       "since": "0.1.0",
       "perfTier": "cheap"
     },
+    "ErrorState": {
+      "role": "error-state",
+      "since": "1.0.1",
+      "perfTier": "cheap"
+    },
     "PulseButton": {
       "role": "action",
       "since": "0.1.0",
