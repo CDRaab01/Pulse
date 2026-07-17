@@ -37,6 +37,7 @@ import design.pulse.ui.components.PulseSegmentedControl
 import design.pulse.ui.components.SettingsSection
 import design.pulse.ui.components.PulseSelectableCard
 import design.pulse.ui.components.SectionHeader
+import design.pulse.ui.components.StaleBanner
 import design.pulse.ui.components.StatTile
 import design.pulse.ui.theme.Pulse
 import design.pulse.ui.theme.PulseAccent
@@ -148,6 +149,8 @@ class PulseScreenshotTest {
                 onRetry = {},
             )
         }
+        // Fixed epoch (a non-today date) so the banner renders the long "MMM d" form deterministically.
+        StaleBanner(asOfMs = 1_751_300_000_000L, channel = Pulse.accent.base)
     }
 
     @Composable

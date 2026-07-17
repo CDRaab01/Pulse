@@ -106,6 +106,25 @@
       "since": "1.0.1",
       "perfTier": "cheap"
     },
+    "defaultFormatAsOf": {
+      "role": "formatter",
+      "since": "1.0.2",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "Plain function, not a composable — the default timestamp voice for StaleBanner ('as of h:mm a' today, 'as of MMM d, h:mm a' otherwise). Public so apps can reuse the same voice outside the banner."
+      }
+    },
+    "StaleBanner": {
+      "role": "status",
+      "since": "1.0.2",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "One-line offline/stale-data banner (CloudOff glyph + 'Offline — as of h:mm a'). Render only when the screen is serving a cached read (asOfMs non-null). The channel Color is caller-supplied; formatAsOf is an overridable timestamp seam (defaultFormatAsOf is public).",
+        "neverDoExtra": [
+          "Do not render it permanently or for fresh data — it is a stale-state signal, not a connectivity indicator."
+        ]
+      }
+    },
     "PulseButton": {
       "role": "action",
       "since": "0.1.0",

@@ -9,7 +9,7 @@
     "Violet",
     "Teal"
   ],
-  "componentCount": 27,
+  "componentCount": 29,
   "components": [
     {
       "name": "ConfettiHost",
@@ -1518,6 +1518,99 @@
       ],
       "agentMeta": {
         "extend": "A titled settings group (PanelCard + SectionHeader + your content). Use it for every group in a Settings screen so panels are consistent and dark-correct.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "StaleBanner",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "StaleBanner.kt",
+      "role": "status",
+      "since": "1.0.2",
+      "perfTier": "cheap",
+      "summary": "One-line \"this data is stale\" banner for screens serving a cached/offline read: a channel-tinted cloud-off glyph plus \"Offline — as of h:mm a\".",
+      "params": [
+        {
+          "name": "asOfMs",
+          "type": "Long",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "channel",
+          "type": "Color",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "prefix",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "formatAsOf",
+          "type": "(Long) -> String",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "icon",
+          "type": "ImageVector",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "One-line offline/stale-data banner (CloudOff glyph + 'Offline — as of h:mm a'). Render only when the screen is serving a cached read (asOfMs non-null). The channel Color is caller-supplied; formatAsOf is an overridable timestamp seam (defaultFormatAsOf is public).",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not render it permanently or for fresh data — it is a stale-state signal, not a connectivity indicator."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "defaultFormatAsOf",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "StaleBanner.kt",
+      "role": "formatter",
+      "since": "1.0.2",
+      "perfTier": "cheap",
+      "summary": "Default capture-time voice for StaleBanner: \"as of h:mm a\" when the timestamp is today, \"as of MMM d, h:mm a\" otherwise.",
+      "params": [
+        {
+          "name": "epochMs",
+          "type": "Long",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "zone",
+          "type": "ZoneId",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "Plain function, not a composable — the default timestamp voice for StaleBanner ('as of h:mm a' today, 'as of MMM d, h:mm a' otherwise). Public so apps can reuse the same voice outside the banner.",
         "neverDo": [
           "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
           "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
