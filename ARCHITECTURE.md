@@ -66,6 +66,13 @@ The **v1.0.0 additions** (the 1.0 polish program, host ROADMAP3 Tier P/P2):
 - *Surfaces/controls* — `HeroPanel` (`HeroPanel.kt`), `PulseSegmentedControl` (`SegmentedControl.kt`),
   `PulseRefreshBox` (`RefreshBox.kt`).
 
+The **v1.0.2 addition** (suite offline-support round, 2026-07-17):
+- *Status* — `StaleBanner` + `defaultFormatAsOf` (`StaleBanner.kt`): the one-line
+  "Offline — as of h:mm a" banner for screens serving a cached read, promoted from Magpie's
+  app-side implementation so all consumers share one stale-data idiom. The channel `Color` is
+  caller-supplied (hue→meaning stays app-side, per the dividing line below); `formatAsOf` is an
+  overridable timestamp seam with the public default exposed for reuse.
+
 The dividing line: **generic tokens/components live here; channel *semantics* (which hue means
 what) stay app-side** in each `ui/theme/<App>Theme.kt`. If a component exists in two apps, promote
 it here as a superset (the v1.0.0 batch did exactly this with Spotter's confetti/celebration and
