@@ -15,7 +15,7 @@ konfetti = "2.0.5"
 # baselines render the same way the consumers' do.
 junit = "4.13.2"
 robolectric = "4.16.1"
-roborazzi = "1.65.0"
+roborazzi = "1.69.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
