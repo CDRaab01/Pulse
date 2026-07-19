@@ -56,7 +56,9 @@ Consequences:
   (slashed-zero monospace numerals are part of the identity).
 - Accent leads are claimed: blue = Spotter, green = Plate, amber = Cookbook, violet = Dragonfly,
   teal = Magpie (added 2026-07-04, ahead of Magpie's Android scaffold — the accent is reserved
-  even though no consumer exists yet). A new app picks an unclaimed accent and registers it here.
+  even though no consumer exists yet), rose = Remnant (reserved 2026-07-19, ahead of Remnant's
+  scaffold — `PulseAccent.Rose` lands with its Phase 0). A new app picks an unclaimed accent and
+  registers it here.
 - Publishing to a real Maven repo can replace the composite build later without consumers
   changing their dependency coordinates — that's the intended evolution if the sibling-checkout
   requirement becomes painful.

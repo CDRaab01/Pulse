@@ -41,7 +41,7 @@ Consequences:
 
 | File | Owns |
 |---|---|
-| `PulseTheme.kt` | The entry point: `PulseTheme(darkTheme, accent: PulseAccent)` — each app picks its lead accent (Spotter Blue, Plate Green, Cookbook Amber, Dragonfly Violet, Magpie Teal — added 2026-07-04) and layers its own domain-channel CompositionLocal on top |
+| `PulseTheme.kt` | The entry point: `PulseTheme(darkTheme, accent: PulseAccent)` — each app picks its lead accent (Spotter Blue, Plate Green, Cookbook Amber, Dragonfly Violet, Magpie Teal — added 2026-07-04, Remnant Rose — added 2026-07-19) and layers its own domain-channel CompositionLocal on top |
 | `Palette.kt`, `Schemes.kt` | The shared hue families + M3 color schemes (dark-first OLED; contrast-safe light variants) |
 | `Type.kt`, `DataType.kt` | UI type scale (Space Grotesk / Inter) + the mono data scale (JetBrains Mono for every numeral). **Fonts are static per-weight instances — never variable fonts** (real-device rendering bug) |
 | `Motion.kt`, `Shape.kt`, `Dimens.kt`, `Structure.kt` | Motion tokens (Fast/Standard/Emphasized/Data + easings), 8/12/16dp shapes, spacing, panel/hairline structural tokens (depth = stroke + tone, not shadows) |
@@ -134,7 +134,7 @@ launch reads as one family:
 1. Add `androidx.core:core-splashscreen`; give the launch theme `parent="Theme.SplashScreen"`.
 2. `windowSplashScreenBackground` = the app's dark ink (`PulseInk`, `#0B0D10`).
 3. `windowSplashScreenAnimatedIcon` = the app's monochrome logo glyph, tinted with the app's lead
-   accent (`PulseAccent` base — Blue/Green/Amber/Violet/Teal).
+   accent (`PulseAccent` base — Blue/Green/Amber/Violet/Teal/Rose).
 4. `postSplashScreenTheme` = the normal app theme; call `installSplashScreen()` before `setContent`.
 
 ## How to change Pulse safely

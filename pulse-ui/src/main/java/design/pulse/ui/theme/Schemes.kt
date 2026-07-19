@@ -25,6 +25,7 @@ private fun darkPrimary(accent: PulseAccent) = when (accent) {
     PulseAccent.Green -> PrimaryFamily(PulseGreen, Color(0xFF00301F), Color(0xFF11332A), Color(0xFFB9F2DC))
     PulseAccent.Violet -> PrimaryFamily(PulseViolet, Color(0xFF120A38), Color(0xFF231F3F), Color(0xFFDAD4FF))
     PulseAccent.Teal -> PrimaryFamily(PulseTeal, Color(0xFF00312D), Color(0xFF0F2E2B), Color(0xFFB0F1E8))
+    PulseAccent.Rose -> PrimaryFamily(PulseRose, Color(0xFF3D0716), Color(0xFF331721), Color(0xFFFFD9E0))
 }
 
 private fun lightPrimary(accent: PulseAccent) = when (accent) {
@@ -33,6 +34,7 @@ private fun lightPrimary(accent: PulseAccent) = when (accent) {
     PulseAccent.Green -> PrimaryFamily(PulseGreenDeep, Color(0xFFFFFFFF), Color(0xFFD8F3E8), Color(0xFF02382A))
     PulseAccent.Violet -> PrimaryFamily(PulseVioletDeep, Color(0xFFFFFFFF), Color(0xFFE6E2FB), Color(0xFF241C66))
     PulseAccent.Teal -> PrimaryFamily(PulseTealDeep, Color(0xFFFFFFFF), Color(0xFFD5F3EF), Color(0xFF00332E))
+    PulseAccent.Rose -> PrimaryFamily(PulseRoseDeep, Color(0xFFFFFFFF), Color(0xFFFCE1E8), Color(0xFF4C0518))
 }
 
 fun pulseLightColorScheme(accent: PulseAccent = PulseAccent.Blue): ColorScheme {
