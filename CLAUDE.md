@@ -2,7 +2,7 @@
 
 The PULSE design system as an Android library (`pulse-ui/` → `design.pulse:pulse-ui`). One
 module, no app. The [README.md](README.md) explains the philosophy and contents; this file is
-about the responsibilities that come with editing a library four apps depend on.
+about the responsibilities that come with editing a library six apps depend on.
 
 ## Who depends on this repo, and how
 
@@ -13,15 +13,16 @@ about the responsibilities that come with editing a library four apps depend on.
 | Spotter | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | Blue |
 | Plate | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | **Green** |
 | Magpie | composite build `includeBuild("../../Pulse")` (live since the 2026-07-05 build) | **Teal** |
+| Crate | composite build `includeBuild("../../Pulse")` (scaffolded 2026-07-25) | **Copper** |
 | Hawksnest | CSS port only (`src/theme/tokens.css`) — web can't consume a Compose lib; dark + light (`:root.light`) since V1 Gate 4 | (CSS port) |
 
 Consequences:
 
-- **A change here ships with every consumer's next release automatically** — all five Compose
-  apps' (Cookbook/Dragonfly/Spotter/Plate/Magpie) `release.yml` jobs check out this repo as a
-  sibling for the composite build. There is no Pulse version gate in practice (the dependency
+- **A change here ships with every consumer's next release automatically** — all six Compose
+  apps' (Cookbook/Dragonfly/Spotter/Plate/Magpie/Crate) `release.yml` jobs check out this repo
+  as a sibling for the composite build. There is no Pulse version gate in practice (the dependency
   line says `0.1.0` but the composite build always uses the sibling working tree/branch that CI
-  checks out). Breaking API changes here break those apps' CI immediately; build all five
+  checks out). Breaking API changes here break those apps' CI immediately; build all six
   consumers before pushing. Corollary: a Pulse push alone triggers **no** consumer release —
   it rides silently until each app's next `android/**` push, which is why additive-with-defaults
   is law. (Hawksnest is a separate CSS port; not a Compose consumer.)
@@ -30,7 +31,7 @@ Consequences:
   `PanelCard` takes onClick/channel/raised/contentPadding; `SectionHeader` takes a `trailing` slot;
   `Sparkline` has a filled-line mode via a non-null `strokeWidth`; `TickerNumber` is here now. New
   params are additive with backward-compatible defaults, so the leaner callers stay pixel-identical —
-  keep it that way (verify all five apps' Roborazzi when touching a shared component).
+  keep it that way (verify all six apps' Roborazzi when touching a shared component).
 - **Version alignment is load-bearing:** consumers' AGP/Kotlin/Compose-BOM must match
   `gradle/libs.versions.toml` here (currently AGP 9.1.1 / Kotlin 2.2.10 / BOM 2026.06.01 —
   that file is the source of truth if this line ever drifts again).
@@ -57,8 +58,10 @@ Consequences:
 - Accent leads are claimed: blue = Spotter, green = Plate, amber = Cookbook, violet = Dragonfly,
   teal = Magpie (added 2026-07-04, ahead of Magpie's Android scaffold — the accent is reserved
   even though no consumer exists yet), rose = Remnant (reserved 2026-07-19, ahead of Remnant's
-  scaffold — `PulseAccent.Rose` lands with its Phase 0). A new app picks an unclaimed accent and
-  registers it here.
+  scaffold — `PulseAccent.Rose` lands with its Phase 0), copper = Crate (added 2026-07-25 with
+  Crate's Phase 0 scaffold — deliberately darker/browner than Cookbook's amber; its hero sweep
+  uses deep hues with white text where Amber's is bright with ink text, so the two warm accents
+  never read as each other). A new app picks an unclaimed accent and registers it here.
 - Publishing to a real Maven repo can replace the composite build later without consumers
   changing their dependency coordinates — that's the intended evolution if the sibling-checkout
   requirement becomes painful.

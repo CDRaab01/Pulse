@@ -20,6 +20,7 @@ val PulseAmber = Color(0xFFF5A623)
 val PulseGreen = Color(0xFF34D399)
 val PulseTeal = Color(0xFF2DD4BF)
 val PulseRose = Color(0xFFFB7185) // pinker than PulseRed on purpose — Rose is an accent, red stays the error voice
+val PulseCopper = Color(0xFFD98A5B) // burnished metal — browner than PulseOrange, less golden than PulseAmber
 val PulseRed = Color(0xFFFF5C5C)
 
 // Deep variants — meet >= 4.5:1 contrast on white for the light theme.
@@ -31,4 +32,5 @@ val PulseGreenDeep = Color(0xFF047857)
 val PulseGreenDeeper = Color(0xFF064E3B) // forest green — deep end of the emerald hero ramp (Plate)
 val PulseTealDeep = Color(0xFF0F766E)
 val PulseRoseDeep = Color(0xFFBE123C)
+val PulseCopperDeep = Color(0xFF9A4D1B)
 val PulseRedDeep = Color(0xFFDC2626)

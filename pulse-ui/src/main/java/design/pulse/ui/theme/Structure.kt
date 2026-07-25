@@ -41,7 +41,7 @@ data class PulseStructure(
 )
 
 /** Which reference hue leads the app — drives the M3 primary family, hero gradient and accent channel. */
-enum class PulseAccent { Blue, Amber, Green, Violet, Teal, Rose }
+enum class PulseAccent { Blue, Amber, Green, Violet, Teal, Rose, Copper }
 
 // Channel triples, shared verbatim across the family (values from the original PULSE build).
 
@@ -51,6 +51,7 @@ fun darkAmberChannel() = PulseChannel(PulseOrange, Color(0xFF3B2418), Color(0xFF
 fun darkVioletChannel() = PulseChannel(PulseViolet, Color(0xFF231F3F), Color(0xFF120A38))
 fun darkTealChannel() = PulseChannel(PulseTeal, Color(0xFF0F2E2B), Color(0xFF00312D))
 fun darkRoseChannel() = PulseChannel(PulseRose, Color(0xFF331721), Color(0xFF3D0716))
+fun darkCopperChannel() = PulseChannel(PulseCopper, Color(0xFF3B2015), Color(0xFF2E1405))
 
 fun lightBlueChannel() = PulseChannel(PulseBlueDeep, Color(0xFFECF1FF), Color(0xFFFFFFFF))
 fun lightGreenChannel() = PulseChannel(PulseGreenDeep, Color(0xFFD8F3E8), Color(0xFFFFFFFF))
@@ -58,6 +59,7 @@ fun lightAmberChannel() = PulseChannel(PulseOrangeDeep, Color(0xFFFBE3D4), Color
 fun lightVioletChannel() = PulseChannel(PulseVioletDeep, Color(0xFFE6E2FB), Color(0xFFFFFFFF))
 fun lightTealChannel() = PulseChannel(PulseTealDeep, Color(0xFFD5F3EF), Color(0xFFFFFFFF))
 fun lightRoseChannel() = PulseChannel(PulseRoseDeep, Color(0xFFFCE1E8), Color(0xFFFFFFFF))
+fun lightCopperChannel() = PulseChannel(PulseCopperDeep, Color(0xFFF5DFCE), Color(0xFFFFFFFF))
 
 fun darkChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Blue -> darkBlueChannel()
@@ -66,6 +68,7 @@ fun darkChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Violet -> darkVioletChannel()
     PulseAccent.Teal -> darkTealChannel()
     PulseAccent.Rose -> darkRoseChannel()
+    PulseAccent.Copper -> darkCopperChannel()
 }
 
 fun lightChannel(accent: PulseAccent): PulseChannel = when (accent) {
@@ -75,6 +78,7 @@ fun lightChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Violet -> lightVioletChannel()
     PulseAccent.Teal -> lightTealChannel()
     PulseAccent.Rose -> lightRoseChannel()
+    PulseAccent.Copper -> lightCopperChannel()
 }
 
 // Hero gradients per accent. The dark blue hero uses the deeper hues so white headline text
@@ -105,6 +109,13 @@ private fun heroGradient(accent: PulseAccent, dark: Boolean): Brush = when (acce
     // measures ≈6.6:1, so the 4.5:1 guarantee holds across the sweep.
     PulseAccent.Rose ->
         Brush.linearGradient(listOf(PulseVioletDeep, PulseRoseDeep))
+    // Copper hero is a heated-metal sweep, hot orange cooling into burnished copper — deep hues
+    // in both modes (the Green precedent): white on PulseOrangeDeep measures 5.18 and on
+    // PulseCopperDeep 6.08, so the 4.5:1 white-headline guarantee holds across the sweep. Kept
+    // deliberately darker than the Amber hero (bright orange→amber with ink text) so the two
+    // warm-accent apps never read as each other.
+    PulseAccent.Copper ->
+        Brush.linearGradient(listOf(PulseOrangeDeep, PulseCopperDeep))
 }
 
 private fun energyGradient(dark: Boolean): Brush =
