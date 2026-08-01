@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5.6.0
         with:
           distribution: temurin
           java-version: "17"
@@ -42,7 +42,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5.6.0
         with:
           distribution: temurin
           java-version: "17"
@@ -61,7 +61,7 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5.6.0
         with:
           distribution: temurin
           java-version: "17"
@@ -70,7 +70,7 @@ jobs:
       - run: ./gradlew :pulse-ui:testDebugUnitTest -Proborazzi.test.verify=true --no-daemon
       - name: Upload diffs on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: roborazzi-diffs
           path: pulse-ui/build/outputs/roborazzi/
@@ -91,7 +91,7 @@ jobs:
         with:
           repository: CDRaab01/Cookbook     # Cookbook/android's settings does includeBuild("../../Pulse")
           path: Cookbook
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5.6.0
         with:
           distribution: temurin
           java-version: "17"
