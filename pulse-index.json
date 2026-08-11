@@ -10,7 +10,7 @@
     "Teal",
     "Rose"
   ],
-  "componentCount": 29,
+  "componentCount": 33,
   "components": [
     {
       "name": "ConfettiHost",
@@ -1511,6 +1511,13 @@
           "required": false
         },
         {
+          "name": "channel",
+          "type": "Color?",
+          "hasDefault": true,
+          "required": false,
+          "since": "1.1.0"
+        },
+        {
           "name": "content",
           "type": "@Composable () -> Unit",
           "hasDefault": false,
@@ -1524,6 +1531,293 @@
           "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
           "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
           "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseSwitchRow",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Settings.kt",
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "cheap",
+      "summary": "A settings toggle: title (plus optional subtitle) with a trailing Switch.",
+      "params": [
+        {
+          "name": "title",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "checked",
+          "type": "Boolean",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(Boolean) -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "subtitle",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "The settings toggle: title (+ optional subtitle) with a trailing Switch. Pass subtitle=null for the single-line form. enabled gates the switch only and deliberately does NOT dim the copy.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not hand-roll Row + Column(weight(1f)) + Switch — the 48dp floor and the gutter before the switch are the whole reason this exists; every hand-rolled copy has ended up with the description crowding the control."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseSettingRow",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Settings.kt",
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "cheap",
+      "summary": "The settings list row — one shape for every \"label on the left, something on the right\" line: a navigation row (pass onClick and it gains a chevron), a value readout (pass value with no onClick, e.g.",
+      "params": [
+        {
+          "name": "label",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "subtitle",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "leading",
+          "type": "(@Composable () -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "trailing",
+          "type": "(@Composable () -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "chevron",
+          "type": "Boolean?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "onClick",
+          "type": "(() -> Unit)?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "The settings list row, one shape for four jobs: navigation (pass onClick, it gains a chevron), a value readout (pass value with no onClick, e.g. an app version), a row mid-action (pass a spinner as trailing with chevron=false), and a row with a badge (trailing renders before the chevron).",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Do not build a bespoke chevron Row per screen — this covers the nav, value, static and busy forms.",
+          "trailing renders BEFORE the chevron; pass chevron=false to replace it rather than stacking two affordances."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseTimeRow",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Settings.kt",
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "moderate",
+      "summary": "A tap-to-set time row: label on the left, the formatted clock value on the right, opening a Material 3 time picker.",
+      "params": [
+        {
+          "name": "label",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "hour",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "minute",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onTimeChange",
+          "type": "(hour: Int, minute: Int) -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "subtitle",
+          "type": "String?",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "is24Hour",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "dialogTitle",
+          "type": "String",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "A tap-to-set clock time: renders as a PulseSettingRow and opens the Material 3 time picker. Reports (hour, minute) because the picker always shows minutes — persist both or the row displays a time the app will not honour.",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Pass is24Hour explicitly in screenshot tests; it otherwise follows the device clock setting and makes baselines host-dependent.",
+          "Use PulseStepperRow for counts — a stepper is the wrong control for a clock time."
+        ],
+        "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
+      }
+    },
+    {
+      "name": "PulseStepperRow",
+      "kind": "composable",
+      "package": "design.pulse.ui.components",
+      "file": "Settings.kt",
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "cheap",
+      "summary": "A −/+ stepper row for a small integer setting — a count, a cadence, a quantity.",
+      "params": [
+        {
+          "name": "label",
+          "type": "String",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "Int",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "onValueChange",
+          "type": "(Int) -> Unit",
+          "hasDefault": false,
+          "required": true
+        },
+        {
+          "name": "modifier",
+          "type": "Modifier",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "min",
+          "type": "Int",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "max",
+          "type": "Int",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "wrap",
+          "type": "Boolean",
+          "hasDefault": true,
+          "required": false
+        },
+        {
+          "name": "valueLabel",
+          "type": "(Int) -> String",
+          "hasDefault": true,
+          "required": false
+        }
+      ],
+      "agentMeta": {
+        "extend": "A minus/plus stepper row for a small integer setting (a count, a cadence). wrap=true rolls the ends over instead of clamping; valueLabel formats the readout (\"2 days\").",
+        "neverDo": [
+          "Fork or copy this component into a consumer app — in-tree drift is the exact failure Pulse exists to kill; extend the shared component instead.",
+          "Add app-domain names or meaning (protein, streak, heat, calories, macro...) to Pulse. Pulse knows hues and structure, never meaning.",
+          "Hard-code a hue — colors come from the accent channel (Pulse.accent) or an explicit channel/color parameter.",
+          "Use elevation or drop shadows for depth. Pulse depth is stroke + tone (hairline + panel/panelHigh), never shadow.",
+          "Use PulseTimeRow for clock times.",
+          "Do not rebuild it from min-width buttons plus a fixed-width value in a weightless Row — that measures wider than the card and silently clips the trailing control."
         ],
         "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
       }

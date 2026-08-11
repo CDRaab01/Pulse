@@ -73,6 +73,29 @@ The **v1.0.2 addition** (suite offline-support round, 2026-07-17):
   caller-supplied (hue→meaning stays app-side, per the dividing line below); `formatAsOf` is an
   overridable timestamp seam with the public default exposed for reuse.
 
+The **v1.1.0 addition** (Spotter settings overhaul, 2026-08-11) — the settings **row** vocabulary,
+joining the `ProfileHeader`/`SettingsSection` group blocks already in `Settings.kt`:
+- `PulseSwitchRow` — title (+ optional subtitle) with a trailing `Switch`. Promoted because four
+  consumers had spelled it four ways, and the hand-rolled versions all shared a defect: no gutter
+  between the copy and the switch, so a long subtitle crowded the control (visible on Spotter's
+  Reminders row). `enabled` gates the switch only — the copy stays full-strength, since a row whose
+  control is unavailable is exactly when the user needs to read why.
+- `PulseSettingRow` — the list row, one shape for navigation (chevron via `onClick`), a value
+  readout (an app version), a badge (`trailing`), and a busy row (`trailing` spinner +
+  `chevron = false`). Subsumes the four bespoke chevron rows Spotter had grown.
+- `PulseTimeRow` — a tap-to-set clock time opening the Material 3 time picker. Reports
+  **`(hour, minute)`**: the picker always shows minutes, so a caller that dropped them would display
+  a time the app won't honour. Widening that callback later would be a breaking change across five
+  consumers, which is why it takes minutes from day one.
+- `PulseStepperRow` — a −/+ row for a small integer (a count, a cadence). Replaces an `HourStepper`
+  that was byte-identical in two consumers and subtly broken in a third, where a fixed-width value
+  between two min-width buttons out-measured its card and silently clipped the trailing control.
+- `SettingsSection` gained `channel` (additive; `null` renders exactly as before) so a channel-tinted
+  settings group no longer has to be open-coded.
+
+**Settings rows hold a 48dp minimum height** — Pulse's first library-wide touch-target rule. Rows are
+controls; anything shorter is a target the platform considers too small to hit reliably.
+
 The dividing line: **generic tokens/components live here; channel *semantics* (which hue means
 what) stay app-side** in each `ui/theme/<App>Theme.kt`. If a component exists in two apps, promote
 it here as a superset (the v1.0.0 batch did exactly this with Spotter's confetti/celebration and

@@ -1,6 +1,5 @@
 {
   "_comment": "Curated semantics for the Pulse component index. HAND-OWNED. The structural facts (param names, types, whether they have defaults) are PARSED FROM SOURCE by tools/PulseIndex.java and must NOT be duplicated here — this file only carries what source cannot express: role, perfTier, since, and agent-adaptation guidance. Every public component in pulse-ui/src/main/java/design/pulse/ui/components/ must have an entry here or the drift-check fails.",
-
   "defaults": {
     "agentMeta": {
       "extend": "Add new parameters only, each with a backward-compatible default, so existing call sites compile and render pixel-identically. Never change or remove an existing parameter's default.",
@@ -13,19 +12,30 @@
       "meaningVia": "Bind a surface to a data domain by passing a channel Color; the mapping of hue -> meaning lives app-side in a CompositionLocal layered over PulseTheme, not in Pulse."
     }
   },
-
   "components": {
     "PanelCard": {
       "role": "surface",
       "since": "0.1.0",
       "perfTier": "cheap",
       "params": {
-        "onClick": { "since": "2026-07-03" },
-        "channel": { "since": "2026-07-03" },
-        "tint": { "since": "2026-07-03" },
-        "raised": { "since": "2026-07-03" },
-        "containerColor": { "since": "2026-07-03" },
-        "contentPadding": { "since": "2026-07-03" }
+        "onClick": {
+          "since": "2026-07-03"
+        },
+        "channel": {
+          "since": "2026-07-03"
+        },
+        "tint": {
+          "since": "2026-07-03"
+        },
+        "raised": {
+          "since": "2026-07-03"
+        },
+        "containerColor": {
+          "since": "2026-07-03"
+        },
+        "contentPadding": {
+          "since": "2026-07-03"
+        }
       }
     },
     "DataText": {
@@ -53,7 +63,9 @@
       "since": "0.1.0",
       "perfTier": "cheap",
       "params": {
-        "trailing": { "since": "2026-07-03" }
+        "trailing": {
+          "since": "2026-07-03"
+        }
       }
     },
     "StatTile": {
@@ -67,12 +79,24 @@
         ]
       },
       "params": {
-        "dense": { "since": "2026-07-03" },
-        "animatedValue": { "since": "2026-07-03" },
-        "valueSuffix": { "since": "2026-07-03" },
-        "icon": { "since": "2026-07-03" },
-        "sparkline": { "since": "2026-07-03" },
-        "onClick": { "since": "2026-07-03" }
+        "dense": {
+          "since": "2026-07-03"
+        },
+        "animatedValue": {
+          "since": "2026-07-03"
+        },
+        "valueSuffix": {
+          "since": "2026-07-03"
+        },
+        "icon": {
+          "since": "2026-07-03"
+        },
+        "sparkline": {
+          "since": "2026-07-03"
+        },
+        "onClick": {
+          "since": "2026-07-03"
+        }
       }
     },
     "Sparkline": {
@@ -86,9 +110,15 @@
         ]
       },
       "params": {
-        "strokeWidth": { "since": "2026-07-03" },
-        "fill": { "since": "2026-07-03" },
-        "emphasizeLast": { "since": "2026-07-03" }
+        "strokeWidth": {
+          "since": "2026-07-03"
+        },
+        "fill": {
+          "since": "2026-07-03"
+        },
+        "emphasizeLast": {
+          "since": "2026-07-03"
+        }
       }
     },
     "ChannelDot": {
@@ -207,6 +237,58 @@
       "perfTier": "cheap",
       "agentMeta": {
         "extend": "A titled settings group (PanelCard + SectionHeader + your content). Use it for every group in a Settings screen so panels are consistent and dark-correct."
+      },
+      "params": {
+        "channel": {
+          "since": "1.1.0"
+        }
+      }
+    },
+    "PulseSwitchRow": {
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "The settings toggle: title (+ optional subtitle) with a trailing Switch. Pass subtitle=null for the single-line form. enabled gates the switch only and deliberately does NOT dim the copy.",
+        "neverDoExtra": [
+          "Do not hand-roll Row + Column(weight(1f)) + Switch — the 48dp floor and the gutter before the switch are the whole reason this exists; every hand-rolled copy has ended up with the description crowding the control."
+        ]
+      }
+    },
+    "PulseSettingRow": {
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "The settings list row, one shape for four jobs: navigation (pass onClick, it gains a chevron), a value readout (pass value with no onClick, e.g. an app version), a row mid-action (pass a spinner as trailing with chevron=false), and a row with a badge (trailing renders before the chevron).",
+        "neverDoExtra": [
+          "Do not build a bespoke chevron Row per screen — this covers the nav, value, static and busy forms.",
+          "trailing renders BEFORE the chevron; pass chevron=false to replace it rather than stacking two affordances."
+        ]
+      }
+    },
+    "PulseTimeRow": {
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "moderate",
+      "agentMeta": {
+        "extend": "A tap-to-set clock time: renders as a PulseSettingRow and opens the Material 3 time picker. Reports (hour, minute) because the picker always shows minutes — persist both or the row displays a time the app will not honour.",
+        "neverDoExtra": [
+          "Pass is24Hour explicitly in screenshot tests; it otherwise follows the device clock setting and makes baselines host-dependent.",
+          "Use PulseStepperRow for counts — a stepper is the wrong control for a clock time."
+        ]
+      }
+    },
+    "PulseStepperRow": {
+      "role": "action",
+      "since": "1.1.0",
+      "perfTier": "cheap",
+      "agentMeta": {
+        "extend": "A minus/plus stepper row for a small integer setting (a count, a cadence). wrap=true rolls the ends over instead of clamping; valueLabel formats the readout (\"2 days\").",
+        "neverDoExtra": [
+          "Use PulseTimeRow for clock times.",
+          "Do not rebuild it from min-width buttons plus a fixed-width value in a weightless Row — that measures wider than the card and silently clips the trailing control."
+        ]
       }
     },
     "OnboardingPage": {

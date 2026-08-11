@@ -34,6 +34,10 @@ import design.pulse.ui.components.PulseLineChart
 import design.pulse.ui.components.PulsePageIndicator
 import design.pulse.ui.components.ProfileHeader
 import design.pulse.ui.components.PulseSegmentedControl
+import design.pulse.ui.components.PulseSettingRow
+import design.pulse.ui.components.PulseStepperRow
+import design.pulse.ui.components.PulseSwitchRow
+import design.pulse.ui.components.PulseTimeRow
 import design.pulse.ui.components.SettingsSection
 import design.pulse.ui.components.PulseSelectableCard
 import design.pulse.ui.components.SectionHeader
@@ -168,6 +172,39 @@ class PulseScreenshotTest {
         }
     }
 
+    /**
+     * The settings row vocabulary, in its own scene so the older [SettingsScene] baselines stay
+     * byte-identical — that they don't move is the proof the row additions changed nothing existing.
+     * `is24Hour` is pinned so the clock labels don't follow the host's locale.
+     */
+    @Composable
+    private fun SettingsRowsScene() {
+        SettingsSection("Reminders") {
+            PulseSwitchRow(
+                title = "Workout nudges",
+                subtitle = "A reminder on workout days, a streak-saver if the day is slipping, " +
+                    "and a one-off comeback nudge after a few missed days.",
+                checked = true,
+                onCheckedChange = {},
+            )
+            PulseTimeRow("Morning reminder", 8, 0, { _, _ -> }, is24Hour = false)
+            PulseTimeRow("Evening streak-saver", 18, 30, { _, _ -> }, is24Hour = false)
+            PulseStepperRow("Train every", 2, {}, min = 1, max = 14, valueLabel = { "$it days" })
+        }
+        SettingsSection("Library & data", channel = Pulse.accent.base) {
+            PulseSettingRow("Exercise library", onClick = {})
+            PulseSettingRow("Workout data", value = "JSON", onClick = {})
+            PulseSwitchRow(
+                title = "Sync to Health Connect",
+                subtitle = "Health Connect isn't available on this device.",
+                checked = false,
+                onCheckedChange = {},
+                enabled = false,
+            )
+            PulseSettingRow("App", value = "1.1.2 · 44fe4b4")
+        }
+    }
+
     private fun heatSample(): List<Float> = List(35) { i -> ((i * 7 + 3) % 5).toFloat() }
 
     // A dependency-free sample glyph (a plus) so the test needn't pull in material-icons; EmptyState
@@ -197,6 +234,9 @@ class PulseScreenshotTest {
 
     @Test fun settings_dark() = capture("settings_dark", true, PulseAccent.Green) { SettingsScene() }
     @Test fun settings_light() = capture("settings_light", false, PulseAccent.Green) { SettingsScene() }
+
+    @Test fun settings_rows_dark() = capture("settings_rows_dark", true, PulseAccent.Blue) { SettingsRowsScene() }
+    @Test fun settings_rows_light() = capture("settings_rows_light", false, PulseAccent.Blue) { SettingsRowsScene() }
 
     @Test fun states_dark() = capture("states_dark", true, PulseAccent.Blue) { StatesScene() }
     @Test fun states_light() = capture("states_light", false, PulseAccent.Blue) { StatesScene() }
