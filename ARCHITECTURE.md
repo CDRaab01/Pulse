@@ -85,8 +85,8 @@ joining the `ProfileHeader`/`SettingsSection` group blocks already in `Settings.
   `chevron = false`). Subsumes the four bespoke chevron rows Spotter had grown.
 - `PulseTimeRow` — a tap-to-set clock time opening the Material 3 time picker. Reports
   **`(hour, minute)`**: the picker always shows minutes, so a caller that dropped them would display
-  a time the app won't honour. Widening that callback later would be a breaking change across five
-  consumers, which is why it takes minutes from day one.
+  a time the app won't honour. Widening that callback later would be a breaking change across every
+  consumer, which is why it takes minutes from day one.
 - `PulseStepperRow` — a −/+ row for a small integer (a count, a cadence). Replaces an `HourStepper`
   that was byte-identical in two consumers and subtly broken in a third, where a fixed-width value
   between two min-width buttons out-measured its card and silently clipped the trailing control.
