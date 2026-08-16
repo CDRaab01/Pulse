@@ -21,6 +21,8 @@ val PulseGreen = Color(0xFF34D399)
 val PulseTeal = Color(0xFF2DD4BF)
 val PulseRose = Color(0xFFFB7185) // pinker than PulseRed on purpose — Rose is an accent, red stays the error voice
 val PulseCopper = Color(0xFFD98A5B) // burnished metal — browner than PulseOrange, less golden than PulseAmber
+val PulseSlate = Color(0xFF94A3B8) // cool grey-blue — the charcoal body of a site tote, dark-theme stroke weight
+val PulseYellow = Color(0xFFF6D80B) // safety yellow — greener/purer than PulseAmber (52.3° vs 37.4° hue)
 val PulseRed = Color(0xFFFF5C5C)
 
 // Deep variants — meet >= 4.5:1 contrast on white for the light theme.
@@ -33,4 +35,10 @@ val PulseGreenDeeper = Color(0xFF064E3B) // forest green — deep end of the eme
 val PulseTealDeep = Color(0xFF0F766E)
 val PulseRoseDeep = Color(0xFFBE123C)
 val PulseCopperDeep = Color(0xFF9A4D1B)
+val PulseSlateDeep = Color(0xFF334155) // 10.35:1 on white — the text-bearing half of the Slate accent
+// Yellow's deep variant is an olive-gold, because that is what "yellow at 4.5:1 on white" actually
+// is (4.92:1). Kept for the rare light-theme case that needs yellow to BEAR text; the Slate accent
+// deliberately hands that job to PulseSlateDeep instead and uses yellow only as a field with ink
+// on it. White on PulseYellow is 1.42:1 — it can never carry white text, in either theme.
+val PulseYellowDeep = Color(0xFF8A6D00)
 val PulseRedDeep = Color(0xFFDC2626)

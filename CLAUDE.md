@@ -14,6 +14,7 @@ about the responsibilities that come with editing a library six apps depend on.
 | Plate | composite build `includeBuild("../../Pulse")` (migrated 2026-07-03) | **Green** |
 | Magpie | composite build `includeBuild("../../Pulse")` (live since the 2026-07-05 build) | **Teal** |
 | Crate | composite build `includeBuild("../../Pulse")` (scaffolded 2026-07-25) | **Copper** |
+| Tote | composite build `includeBuild("../../Pulse")` (scaffolded 2026-08-15) | **Slate** |
 | Hawksnest | CSS port only (`src/theme/tokens.css`) — web can't consume a Compose lib; dark + light (`:root.light`) since V1 Gate 4 | (CSS port) |
 
 Consequences:
@@ -61,7 +62,28 @@ Consequences:
   scaffold — `PulseAccent.Rose` lands with its Phase 0), copper = Crate (added 2026-07-25 with
   Crate's Phase 0 scaffold — deliberately darker/browner than Cookbook's amber; its hero sweep
   uses deep hues with white text where Amber's is bright with ink text, so the two warm accents
-  never read as each other). A new app picks an unclaimed accent and registers it here.
+  never read as each other), slate = Tote (added 2026-08-15 with Tote's Phase 0). A new app picks
+  an unclaimed accent and registers it here.
+- **Slate is the one accent that is a PAIR of hues, not one** — charcoal body + safety-yellow
+  marking, after the black-and-yellow site tote. It is the exception to "a deep variant plus a
+  bright variant of the same hue", so three things about it are deliberate and should not be
+  tidied up:
+  1. **The dark and light channels lead with different halves.** Dark mode's surface is already
+     the charcoal (`PulseInk`/`PulsePanel` are near-black), so `base` is the yellow; on white,
+     yellow cannot bear text at all, so `base` becomes `PulseSlateDeep` and the yellow drops to
+     the container fill. Both halves are present in both themes — only the text-bearing one swaps.
+  2. **`lightSlateChannel` is the only channel whose `base` and `dim` are different hues** (slate
+     stroke/text on a pale-yellow fill). That is the object: a yellow label lettered in charcoal.
+  3. **The hero gradient contains no yellow, on measured grounds.** A slate→yellow sweep passes
+     through the olive `#8A8023`, where white falls to 4.04:1 *and* ink only reaches 4.81:1 — the
+     one blend in this family where neither text colour is safe. The hero is therefore a
+     charcoal-only sweep (white text: 14.63 → 10.67 → 7.58 across it) and the yellow is applied
+     on top as a mark. Do not "complete" the gradient with a yellow stop.
+  Hue alone does **not** separate Tote's yellow from Cookbook's amber (52.3° vs 37.4° — only
+  14.9° apart). What separates them is structural: Cookbook's light primary is a warm
+  `PulseOrangeDeep` with a bright orange→amber ink-text hero, while Tote's light primary is a cool
+  `PulseSlateDeep` with a charcoal white-text hero. Keep that structural contrast if either accent
+  is ever retuned — narrowing it is what would make the two apps read as each other.
 - Publishing to a real Maven repo can replace the composite build later without consumers
   changing their dependency coordinates — that's the intended evolution if the sibling-checkout
   requirement becomes painful.

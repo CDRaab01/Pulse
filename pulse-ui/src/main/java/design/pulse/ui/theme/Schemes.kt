@@ -27,6 +27,10 @@ private fun darkPrimary(accent: PulseAccent) = when (accent) {
     PulseAccent.Teal -> PrimaryFamily(PulseTeal, Color(0xFF00312D), Color(0xFF0F2E2B), Color(0xFFB0F1E8))
     PulseAccent.Rose -> PrimaryFamily(PulseRose, Color(0xFF3D0716), Color(0xFF331721), Color(0xFFFFD9E0))
     PulseAccent.Copper -> PrimaryFamily(PulseCopper, Color(0xFF2E1405), Color(0xFF3B2015), Color(0xFFFFD8C2))
+    // Dark mode already IS the charcoal half of this accent (PulseInk/PulsePanel are near-black),
+    // so the yellow marking leads: a yellow primary reading 13.66:1 on ink, inked — not whited —
+    // at 11.92:1.
+    PulseAccent.Slate -> PrimaryFamily(PulseYellow, Color(0xFF231C00), Color(0xFF2E2A14), Color(0xFFFAEBA8))
 }
 
 private fun lightPrimary(accent: PulseAccent) = when (accent) {
@@ -37,6 +41,10 @@ private fun lightPrimary(accent: PulseAccent) = when (accent) {
     PulseAccent.Teal -> PrimaryFamily(PulseTealDeep, Color(0xFFFFFFFF), Color(0xFFD5F3EF), Color(0xFF00332E))
     PulseAccent.Rose -> PrimaryFamily(PulseRoseDeep, Color(0xFFFFFFFF), Color(0xFFFCE1E8), Color(0xFF4C0518))
     PulseAccent.Copper -> PrimaryFamily(PulseCopperDeep, Color(0xFFFFFFFF), Color(0xFFF5DFCE), Color(0xFF4A1F0C))
+    // On white the pair inverts: the charcoal half takes the text-bearing primary (10.35:1) and
+    // the yellow half becomes the container — a pale-yellow card lettered in dark gold (14.33:1).
+    // Both halves stay present in both themes; only which one carries text changes.
+    PulseAccent.Slate -> PrimaryFamily(PulseSlateDeep, Color(0xFFFFFFFF), Color(0xFFFCF3CF), Color(0xFF2A2100))
 }
 
 fun pulseLightColorScheme(accent: PulseAccent = PulseAccent.Blue): ColorScheme {
