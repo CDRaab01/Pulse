@@ -41,7 +41,7 @@ data class PulseStructure(
 )
 
 /** Which reference hue leads the app — drives the M3 primary family, hero gradient and accent channel. */
-enum class PulseAccent { Blue, Amber, Green, Violet, Teal, Rose, Copper }
+enum class PulseAccent { Blue, Amber, Green, Violet, Teal, Rose, Copper, Slate }
 
 // Channel triples, shared verbatim across the family (values from the original PULSE build).
 
@@ -52,6 +52,11 @@ fun darkVioletChannel() = PulseChannel(PulseViolet, Color(0xFF231F3F), Color(0xF
 fun darkTealChannel() = PulseChannel(PulseTeal, Color(0xFF0F2E2B), Color(0xFF00312D))
 fun darkRoseChannel() = PulseChannel(PulseRose, Color(0xFF331721), Color(0xFF3D0716))
 fun darkCopperChannel() = PulseChannel(PulseCopper, Color(0xFF3B2015), Color(0xFF2E1405))
+// Slate is a PAIR, not a hue: charcoal body + safety-yellow marking. In dark mode the surface is
+// already the charcoal (PulseInk/PulsePanel are near-black), so the marking leads — `base` is the
+// yellow. `on` is ink, never white: white on PulseYellow is 1.42:1 (the Amber precedent, whose
+// dark channel also inks its `on`).
+fun darkSlateChannel() = PulseChannel(PulseYellow, Color(0xFF2E2A14), Color(0xFF231C00))
 
 fun lightBlueChannel() = PulseChannel(PulseBlueDeep, Color(0xFFECF1FF), Color(0xFFFFFFFF))
 fun lightGreenChannel() = PulseChannel(PulseGreenDeep, Color(0xFFD8F3E8), Color(0xFFFFFFFF))
@@ -60,6 +65,12 @@ fun lightVioletChannel() = PulseChannel(PulseVioletDeep, Color(0xFFE6E2FB), Colo
 fun lightTealChannel() = PulseChannel(PulseTealDeep, Color(0xFFD5F3EF), Color(0xFFFFFFFF))
 fun lightRoseChannel() = PulseChannel(PulseRoseDeep, Color(0xFFFCE1E8), Color(0xFFFFFFFF))
 fun lightCopperChannel() = PulseChannel(PulseCopperDeep, Color(0xFFF5DFCE), Color(0xFFFFFFFF))
+// The one channel in the family whose `base` and `dim` are deliberately DIFFERENT hues, because
+// the accent is a pair. On white, yellow cannot bear text at all, so the charcoal half takes the
+// stroke/text job (`base`, 10.35:1 on white) and the yellow half becomes the container fill
+// (`dim`) — a pale-yellow card ruled and lettered in charcoal, which is the object this accent is
+// named after. Slate-on-yellow measures 9.30:1. `on` is white, for content atop a slate fill.
+fun lightSlateChannel() = PulseChannel(PulseSlateDeep, Color(0xFFFCF3CF), Color(0xFFFFFFFF))
 
 fun darkChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Blue -> darkBlueChannel()
@@ -69,6 +80,7 @@ fun darkChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Teal -> darkTealChannel()
     PulseAccent.Rose -> darkRoseChannel()
     PulseAccent.Copper -> darkCopperChannel()
+    PulseAccent.Slate -> darkSlateChannel()
 }
 
 fun lightChannel(accent: PulseAccent): PulseChannel = when (accent) {
@@ -79,6 +91,7 @@ fun lightChannel(accent: PulseAccent): PulseChannel = when (accent) {
     PulseAccent.Teal -> lightTealChannel()
     PulseAccent.Rose -> lightRoseChannel()
     PulseAccent.Copper -> lightCopperChannel()
+    PulseAccent.Slate -> lightSlateChannel()
 }
 
 // Hero gradients per accent. The dark blue hero uses the deeper hues so white headline text
@@ -116,6 +129,20 @@ private fun heroGradient(accent: PulseAccent, dark: Boolean): Brush = when (acce
     // warm-accent apps never read as each other.
     PulseAccent.Copper ->
         Brush.linearGradient(listOf(PulseOrangeDeep, PulseCopperDeep))
+    // Slate hero is a raking-light sweep across a charcoal shell — slate-800 into slate-600, the
+    // same hue in both modes. White headline text measures 14.63 at the start, 10.67 at the
+    // midpoint and 7.58 at the end, so the 4.5:1 guarantee holds comfortably across the whole
+    // sweep.
+    //
+    // The accent's yellow is deliberately NOT in this gradient, and that is a measured decision
+    // rather than a stylistic one: a slate->yellow sweep passes through the olive #8A8023, where
+    // white falls to 4.04:1 AND ink only reaches 4.81:1 — the one blend in the family where
+    // NEITHER text colour is safe, so a hero headline would have no legible option mid-sweep.
+    // The yellow belongs on top of this shell as a mark (rule, glyph, key figure) with ink on it,
+    // the way a real site tote is a charcoal box wearing a yellow band. Do not "finish" this
+    // gradient by adding a yellow stop.
+    PulseAccent.Slate ->
+        Brush.linearGradient(listOf(Color(0xFF1E293B), Color(0xFF475569)))
 }
 
 private fun energyGradient(dark: Boolean): Brush =
