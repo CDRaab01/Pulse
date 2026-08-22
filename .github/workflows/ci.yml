@@ -70,7 +70,7 @@ jobs:
       - run: ./gradlew :pulse-ui:testDebugUnitTest -Proborazzi.test.verify=true --no-daemon
       - name: Upload diffs on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: roborazzi-diffs
           path: pulse-ui/build/outputs/roborazzi/
