@@ -189,8 +189,13 @@ fun StatTile(
     unit: String? = null,
     channel: Color? = null,
     // Dense "metric" layout (Spotter): plain caption + small value, with an optional leading [icon],
-    // a rolling [animatedValue] (+ [valueSuffix]), a trailing [sparkline], and tap via [onClick].
+    // a rolling [animatedValue] (+ [valueSuffix]), and a trailing [sparkline].
     // Left false, renders the standard tile (tick caption + prominent value + [unit]).
+    //
+    // [onClick] works in BOTH layouts. It used to be honoured only in the dense branch, so a
+    // standard tile accepted the parameter and silently dropped it — a tile that looked tappable,
+    // was wired to a handler, and did nothing. Tote's Find tab found it: the tap landed, the node
+    // was there, and no callback ever fired.
     dense: Boolean = false,
     animatedValue: Int? = null,
     valueSuffix: String = "",
@@ -241,7 +246,10 @@ fun StatTile(
             }
         }
     } else {
-        PanelCard(modifier = modifier) {
+        // `onClick` only. `channel` is deliberately still not forwarded: this branch has never
+        // tinted its border, and adding that here would restyle every standard tile in the suite
+        // under cover of a bug fix. A null onClick renders exactly as before.
+        PanelCard(modifier = modifier, onClick = onClick) {
             Column {
                 SectionHeader(label, channel = ch)
                 Spacer(Modifier.height(8.dp))

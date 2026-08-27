@@ -52,10 +52,21 @@ Consequences:
 ### `components/` — the kit
 
 The **0.1 baseline** (Spotter-superset, reconciled 2026-07-03): `PanelCard`, `PulseButton`,
-`StatTile` (incl. `dense` metric mode), `SectionHeader` (trailing slot), `DataText`/`TickerNumber`,
+`StatTile` (incl. `dense` metric mode; **`onClick` works in both layouts** — see below),
+`SectionHeader` (trailing slot), `DataText`/`TickerNumber`,
 `ProgressRing`, `Sparkline` (line + filled modes), `Caption`, `ChannelDot`, `EmptyState`,
 `Modifier.pressScale` — richer parameters with defaults chosen so leaner callers render
 pixel-identically.
+
+**A parameter a component accepts, it must honour.** `StatTile.onClick` was wired only in the
+`dense` branch: the standard layout took the parameter and dropped it, so a tile rendered, was
+findable, took the tap and did nothing. Neither of the two callers that existed could have caught
+it — both passed `dense = true` — and it surfaced only when Tote made a standard tile tappable so
+a count of loose items could open the screen listing them. `StatTileClickTest` now asserts both
+layouts, deliberately including the branch that already worked, because a later unification of the
+two could break it in the other direction. Note the fix forwards **`onClick` only**: the standard
+branch has never tinted its border from `channel`, and forwarding that too would restyle every
+standard tile in six apps under cover of a bug fix.
 
 The **v1.0.0 additions** (the 1.0 polish program, host ROADMAP3 Tier P/P2):
 - *Delight* — `ConfettiHost`, `CelebrationPulse` (`Celebration.kt`; brings in the konfetti dep).
