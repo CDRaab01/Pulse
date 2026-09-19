@@ -14,8 +14,8 @@ konfetti = "2.0.5"
 # Screenshot-test stack — pinned to the suite's proven versions (Cookbook/Plate) so pulse-ui's
 # baselines render the same way the consumers' do.
 junit = "4.13.2"
-robolectric = "4.16.1"
-roborazzi = "1.65.0"
+robolectric = "4.17"
+roborazzi = "1.74.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
