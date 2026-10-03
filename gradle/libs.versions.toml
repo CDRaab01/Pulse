@@ -5,7 +5,7 @@
 [versions]
 agp = "9.1.1"
 kotlin = "2.2.10"
-coreKtx = "1.19.0"
+coreKtx = "1.19.1"
 composeBom = "2026.06.01"
 # konfetti: the celebration burst. Pinned to the version already proven in Spotter (2.0.5) so its
 # adoption is a zero-visual-diff swap. This is the one third-party runtime dependency Pulse carries —
@@ -14,8 +14,8 @@ konfetti = "2.0.5"
 # Screenshot-test stack — pinned to the suite's proven versions (Cookbook/Plate) so pulse-ui's
 # baselines render the same way the consumers' do.
 junit = "4.13.2"
-robolectric = "4.16.1"
-roborazzi = "1.65.0"
+robolectric = "4.17"
+roborazzi = "1.76.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
